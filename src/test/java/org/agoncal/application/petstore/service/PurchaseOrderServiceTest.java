@@ -21,88 +21,85 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class PurchaseOrderServiceTest
-{
+public class PurchaseOrderServiceTest {
 
-   // ======================================
-   // =             Attributes             =
-   // ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-   @Inject
-   private PurchaseOrderService purchaseorderservice;
+    @Inject
+    private PurchaseOrderService purchaseorderservice;
 
-   // ======================================
-   // =             Deployment             =
-   // ======================================
+    // ======================================
+    // =             Deployment             =
+    // ======================================
 
-   @Deployment
-   public static JavaArchive createDeployment()
-   {
-      return ShrinkWrap.create(JavaArchive.class)
-            .addClass(AbstractService.class)
-            .addClass(PurchaseOrderService.class)
-            .addClass(PurchaseOrder.class)
-            .addClass(Country.class)
-            .addClass(Address.class)
-            .addClass(Customer.class)
-            .addClass(CreditCard.class)
-            .addClass(CreditCardType.class)
-            .addClass(OrderLine.class)
-            .addClass(Category.class)
-            .addClass(Product.class)
-            .addClass(Item.class)
-            .addClass(ShoppingCartItem.class)
-            .addClass(UserRole.class)
-            .addClass(ValidationException.class)
-            .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
-            .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-   }
+    @Deployment
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
+                .addClass(AbstractService.class)
+                .addClass(PurchaseOrderService.class)
+                .addClass(PurchaseOrder.class)
+                .addClass(Country.class)
+                .addClass(Address.class)
+                .addClass(Customer.class)
+                .addClass(CreditCard.class)
+                .addClass(CreditCardType.class)
+                .addClass(OrderLine.class)
+                .addClass(Category.class)
+                .addClass(Product.class)
+                .addClass(Item.class)
+                .addClass(ShoppingCartItem.class)
+                .addClass(UserRole.class)
+                .addClass(ValidationException.class)
+                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
 
-   // ======================================
-   // =             Test Cases             =
-   // ======================================
+    // ======================================
+    // =             Test Cases             =
+    // ======================================
 
-   @Test
-   public void should_be_deployed()
-   {
-      Assert.assertNotNull(purchaseorderservice);
-   }
+    @Test
+    public void should_be_deployed() {
+        Assert.assertNotNull(purchaseorderservice);
+    }
 
-   @Test @Ignore
-   public void should_crud()
-   {
-      // Gets all the objects
-      int initialSize = purchaseorderservice.listAll().size();
+    @Test
+    @Ignore
+    public void should_crud() {
+        // Gets all the objects
+        int initialSize = purchaseorderservice.listAll().size();
 
-      // Creates an object
-      Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
-      Address address = new Address("78 Gnu Rd", "Texas", "666", country);
-      Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address);
-      CreditCard creditCard = new CreditCard("1234", CreditCardType.MASTER_CARD, "10/12");
-      Set<OrderLine> orderLines = new HashSet<>();
-      PurchaseOrder purchaseOrder = new PurchaseOrder(customer, creditCard, address);
-      purchaseOrder.setOrderLines(orderLines);
-      purchaseOrder.setDiscount(12.5F);
+        // Creates an object
+        Country country = new Country("DV", "Dummy value", "Dummy value", "DMV", "DMV");
+        Address address = new Address("78 Gnu Rd", "Texas", "666", country);
+        Customer customer = new Customer("Paul", "Mc Cartney", "pmac", "pmac", "paul@beales.com", address);
+        CreditCard creditCard = new CreditCard("1234", CreditCardType.MASTER_CARD, "10/12");
+        Set<OrderLine> orderLines = new HashSet<>();
+        PurchaseOrder purchaseOrder = new PurchaseOrder(customer, creditCard, address);
+        purchaseOrder.setOrderLines(orderLines);
+        purchaseOrder.setDiscount(12.5F);
 
-      // Inserts the object into the database
-      purchaseOrder = purchaseorderservice.persist(purchaseOrder);
-      assertNotNull(purchaseOrder.getId());
-      assertEquals(initialSize + 1, purchaseorderservice.listAll().size());
+        // Inserts the object into the database
+        purchaseOrder = purchaseorderservice.persist(purchaseOrder);
+        assertNotNull(purchaseOrder.getId());
+        assertEquals(initialSize + 1, purchaseorderservice.listAll().size());
 
-      // Finds the object from the database and checks it's the right one
-      purchaseOrder = purchaseorderservice.findById(purchaseOrder.getId());
-      assertEquals(new Float(12.5F), purchaseOrder.getDiscountRate());
+        // Finds the object from the database and checks it's the right one
+        purchaseOrder = purchaseorderservice.findById(purchaseOrder.getId());
+        assertEquals(new Float(12.5F), purchaseOrder.getDiscountRate());
 
-      // Updates the object
-      purchaseOrder.setDiscount(43.25F);
-      purchaseOrder = purchaseorderservice.merge(purchaseOrder);
+        // Updates the object
+        purchaseOrder.setDiscount(43.25F);
+        purchaseOrder = purchaseorderservice.merge(purchaseOrder);
 
-      // Finds the object from the database and checks it has been updated
-      purchaseOrder = purchaseorderservice.findById(purchaseOrder.getId());
-      assertEquals(new Float(43.25F), purchaseOrder.getDiscountRate());
+        // Finds the object from the database and checks it has been updated
+        purchaseOrder = purchaseorderservice.findById(purchaseOrder.getId());
+        assertEquals(new Float(43.25F), purchaseOrder.getDiscountRate());
 
-      // Deletes the object from the database and checks it's not there anymore
-      purchaseorderservice.remove(purchaseOrder);
-      assertEquals(initialSize, purchaseorderservice.listAll().size());
-   }
+        // Deletes the object from the database and checks it's not there anymore
+        purchaseorderservice.remove(purchaseOrder);
+        assertEquals(initialSize, purchaseorderservice.listAll().size());
+    }
 }

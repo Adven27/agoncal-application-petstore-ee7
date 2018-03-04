@@ -10,9 +10,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- *         Any JSF backing bean using this interceptor binding will catch and display exceptions on the JSF page
+ * http://www.antoniogoncalves.org
+ * --
+ * Any JSF backing bean using this interceptor binding will catch and display exceptions on the JSF page
  */
 
 @InterceptorBinding

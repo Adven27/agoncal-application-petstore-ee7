@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- *         This interceptor catches exception and displayes them in a JSF page
+ * http://www.antoniogoncalves.org
+ * --
+ * This interceptor catches exception and displayes them in a JSF page
  */
 
 @Interceptor

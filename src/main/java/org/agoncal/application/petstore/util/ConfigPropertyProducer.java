@@ -7,8 +7,8 @@ import java.util.Properties;
 
 /**
  * @author blep
- *         Date: 16/02/12
- *         Time: 20:56
+ * Date: 16/02/12
+ * Time: 20:56
  */
 
 public class ConfigPropertyProducer {

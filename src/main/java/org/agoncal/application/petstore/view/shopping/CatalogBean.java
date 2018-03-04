@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
+ * http://www.antoniogoncalves.org
+ * --
  */
 
 @Named
@@ -25,10 +25,6 @@ import java.util.List;
 @Loggable
 @CatchException
 public class CatalogBean extends AbstractBean implements Serializable {
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
 
     @Inject
     private CatalogService catalogService;

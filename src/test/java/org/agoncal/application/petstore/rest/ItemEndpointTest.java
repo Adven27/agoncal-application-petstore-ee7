@@ -9,7 +9,6 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,58 +22,53 @@ import java.net.URI;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
-public class ItemEndpointTest
-{
+public class ItemEndpointTest {
 
-   // ======================================
-   // =             Attributes             =
-   // ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-   @ArquillianResource
-   private URI baseURL;
+    @ArquillianResource
+    private URI baseURL;
 
-   // ======================================
-   // =             Deployment             =
-   // ======================================
+    // ======================================
+    // =             Deployment             =
+    // ======================================
 
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
-   {
-      return ShrinkWrap.create(WebArchive.class)
-            .addClass(RestApplication.class)
-            .addClass(ItemEndpoint.class)
-            .addClass(Item.class)
-            .addClass(Product.class)
-            .addClass(Category.class)
-            .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
-            .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-   }
+    @Deployment(testable = false)
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class)
+                .addClass(RestApplication.class)
+                .addClass(ItemEndpoint.class)
+                .addClass(Item.class)
+                .addClass(Product.class)
+                .addClass(Category.class)
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
 
-   // ======================================
-   // =             Test Cases             =
-   // ======================================
+    // ======================================
+    // =             Test Cases             =
+    // ======================================
 
-   @Test
-   public void should_be_deployed()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("items");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
-   }
+    @Test
+    public void should_be_deployed() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("items");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
+    }
 
-   @Test
-   public void should_produce_json()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("items");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_JSON).get().getStatus());
-   }
+    @Test
+    public void should_produce_json() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("items");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_JSON).get().getStatus());
+    }
 
-   @Test
-   public void should_produce_xml()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("items");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
-   }
+    @Test
+    public void should_produce_xml() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("items");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
+    }
 }

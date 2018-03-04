@@ -30,7 +30,8 @@
                             <h:outputLabel value="user/user - admin/admin"/>
                         </f:facet>
                     </h:panelGrid>
-                    <h:commandButton value="#{i18n.signon_signIn}" action="#{accountBean.doLogin}" class="btn btn-primary"
+                    <h:commandButton value="#{i18n.signon_signIn}" action="#{accountBean.doLogin}"
+                                     class="btn btn-primary"
                                      type="submit"/>
                 </h:form>
             </div>
@@ -48,8 +49,10 @@
                         <h:outputLabel value="#{i18n.customer_password}:" for="newpassword"/>
                         <h:inputSecret id="newpassword" value="#{credentialsBean.password}" maxlength="10" size="12"/>
                         <h:outputLabel value="#{i18n.customer_password} (#{i18n.again}):" for="newpasswordagain"/>
-                        <h:inputSecret id="newpasswordagain" value="#{credentialsBean.password2}" maxlength="10" size="12"/>
-                        <h:commandButton value="#{i18n.signon_new}" action="#{accountBean.doCreateNewAccount}" class="btn btn-primary"
+                        <h:inputSecret id="newpasswordagain" value="#{credentialsBean.password2}" maxlength="10"
+                                       size="12"/>
+                        <h:commandButton value="#{i18n.signon_new}" action="#{accountBean.doCreateNewAccount}"
+                                         class="btn btn-primary"
                                          type="submit"/>
                     </h:panelGrid>
                 </h:form>

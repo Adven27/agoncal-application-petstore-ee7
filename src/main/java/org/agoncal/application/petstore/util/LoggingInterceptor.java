@@ -9,16 +9,15 @@ import java.util.logging.Logger;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- *         This interceptor implements Serializable because it's used on a Stateful Session Bean who has
- *         passivation and activation lifecycle.
+ * http://www.antoniogoncalves.org
+ * --
+ * This interceptor implements Serializable because it's used on a Stateful Session Bean who has
+ * passivation and activation lifecycle.
  */
 
 @Loggable
 @Interceptor
-public class LoggingInterceptor implements Serializable 
-{
+public class LoggingInterceptor implements Serializable {
 
     // ======================================
     // =             Attributes             =
@@ -32,16 +31,12 @@ public class LoggingInterceptor implements Serializable
     // ======================================
 
     @AroundInvoke
-    private Object intercept(InvocationContext ic) throws Exception
-    {
+    private Object intercept(InvocationContext ic) throws Exception {
         logger.entering(ic.getTarget().getClass().getName(), ic.getMethod().getName());
         logger.info(">>> " + ic.getTarget().getClass().getName() + "-" + ic.getMethod().getName());
-        try 
-        {
+        try {
             return ic.proceed();
-        } 
-        finally 
-        {
+        } finally {
             logger.exiting(ic.getTarget().getClass().getName(), ic.getMethod().getName());
             logger.info("<<< " + ic.getTarget().getClass().getName() + "-" + ic.getMethod().getName());
         }

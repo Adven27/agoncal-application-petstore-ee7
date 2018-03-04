@@ -11,8 +11,8 @@ import java.util.Locale;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
+ * http://www.antoniogoncalves.org
+ * --
  */
 
 @Named

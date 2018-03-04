@@ -1,8 +1,7 @@
 package org.agoncal.application.petstore.view.admin;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import org.agoncal.application.petstore.model.Customer;
+import org.agoncal.application.petstore.util.Loggable;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -23,9 +22,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.agoncal.application.petstore.model.Customer;
-import org.agoncal.application.petstore.util.Loggable;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Backing bean for Customer entities.
@@ -41,304 +40,250 @@ import org.agoncal.application.petstore.util.Loggable;
 @Stateful
 @ConversationScoped
 @Loggable
-public class CustomerBean implements Serializable
-{
+public class CustomerBean implements Serializable {
 
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
    /*
     * Support creating and retrieving Customer entities
     */
 
-   private Long id;
+    private Long id;
+    private Customer customer;
+    @Inject
+    private Conversation conversation;
+    @PersistenceContext(unitName = "applicationPetstorePU", type = PersistenceContextType.EXTENDED)
+    private EntityManager entityManager;
+    private int page;
+    private long count;
+    private List<Customer> pageItems;
+    private Customer example = new Customer();
+    @Resource
+    private SessionContext sessionContext;
+    private Customer add = new Customer();
 
-   public Long getId()
-   {
-      return this.id;
-   }
-
-   public void setId(Long id)
-   {
-      this.id = id;
-   }
-
-   private Customer customer;
-
-   public Customer getCustomer()
-   {
-      return this.customer;
-   }
-
-   public void setCustomer(Customer customer)
-   {
-      this.customer = customer;
-   }
-
-   @Inject
-   private Conversation conversation;
-
-   @PersistenceContext(unitName = "applicationPetstorePU", type = PersistenceContextType.EXTENDED)
-   private EntityManager entityManager;
-
-   public String create()
-   {
-
-      this.conversation.begin();
-      this.conversation.setTimeout(1800000L);
-      return "create?faces-redirect=true";
-   }
-
-   public void retrieve()
-   {
-
-      if (FacesContext.getCurrentInstance().isPostback())
-      {
-         return;
-      }
-
-      if (this.conversation.isTransient())
-      {
-         this.conversation.begin();
-         this.conversation.setTimeout(1800000L);
-      }
-
-      if (this.id == null)
-      {
-         this.customer = this.example;
-      }
-      else
-      {
-         this.customer = findById(getId());
-      }
-   }
-
-   public Customer findById(Long id)
-   {
-
-      return this.entityManager.find(Customer.class, id);
-   }
+    public Long getId() {
+        return this.id;
+    }
 
    /*
     * Support updating and deleting Customer entities
     */
 
-   public String update()
-   {
-      this.conversation.end();
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-      try
-      {
-         if (this.id == null)
-         {
-            this.entityManager.persist(this.customer);
-            return "search?faces-redirect=true";
-         }
-         else
-         {
-            this.entityManager.merge(this.customer);
-            return "view?faces-redirect=true&id=" + this.customer.getId();
-         }
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
-
-   public String delete()
-   {
-      this.conversation.end();
-
-      try
-      {
-         Customer deletableEntity = findById(getId());
-
-         this.entityManager.remove(deletableEntity);
-         this.entityManager.flush();
-         return "search?faces-redirect=true";
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
+    public Customer getCustomer() {
+        return this.customer;
+    }
 
    /*
     * Support searching Customer entities with pagination
     */
 
-   private int page;
-   private long count;
-   private List<Customer> pageItems;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-   private Customer example = new Customer();
+    public String create() {
 
-   public int getPage()
-   {
-      return this.page;
-   }
+        this.conversation.begin();
+        this.conversation.setTimeout(1800000L);
+        return "create?faces-redirect=true";
+    }
 
-   public void setPage(int page)
-   {
-      this.page = page;
-   }
+    public void retrieve() {
 
-   public int getPageSize()
-   {
-      return 10;
-   }
+        if (FacesContext.getCurrentInstance().isPostback()) {
+            return;
+        }
 
-   public Customer getExample()
-   {
-      return this.example;
-   }
+        if (this.conversation.isTransient()) {
+            this.conversation.begin();
+            this.conversation.setTimeout(1800000L);
+        }
 
-   public void setExample(Customer example)
-   {
-      this.example = example;
-   }
+        if (this.id == null) {
+            this.customer = this.example;
+        } else {
+            this.customer = findById(getId());
+        }
+    }
 
-   public String search()
-   {
-      this.page = 0;
-      return null;
-   }
+    public Customer findById(Long id) {
 
-   public void paginate()
-   {
+        return this.entityManager.find(Customer.class, id);
+    }
 
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+    public String update() {
+        this.conversation.end();
 
-      // Populate this.count
+        try {
+            if (this.id == null) {
+                this.entityManager.persist(this.customer);
+                return "search?faces-redirect=true";
+            } else {
+                this.entityManager.merge(this.customer);
+                return "view?faces-redirect=true&id=" + this.customer.getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            return null;
+        }
+    }
 
-      CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<Customer> root = countCriteria.from(Customer.class);
-      countCriteria = countCriteria.select(builder.count(root)).where(
-            getSearchPredicates(root));
-      this.count = this.entityManager.createQuery(countCriteria)
-            .getSingleResult();
+    public String delete() {
+        this.conversation.end();
 
-      // Populate this.pageItems
+        try {
+            Customer deletableEntity = findById(getId());
 
-      CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
-      root = criteria.from(Customer.class);
-      TypedQuery<Customer> query = this.entityManager.createQuery(criteria
-            .select(root).where(getSearchPredicates(root)));
-      query.setFirstResult(this.page * getPageSize()).setMaxResults(
-            getPageSize());
-      this.pageItems = query.getResultList();
-   }
+            this.entityManager.remove(deletableEntity);
+            this.entityManager.flush();
+            return "search?faces-redirect=true";
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            return null;
+        }
+    }
 
-   private Predicate[] getSearchPredicates(Root<Customer> root)
-   {
+    public int getPage() {
+        return this.page;
+    }
 
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-      List<Predicate> predicatesList = new ArrayList<Predicate>();
+    public void setPage(int page) {
+        this.page = page;
+    }
 
-      String firstName = this.example.getFirstName();
-      if (firstName != null && !"".equals(firstName))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String> get("firstName")), '%' + firstName.toLowerCase() + '%'));
-      }
-      String lastName = this.example.getLastName();
-      if (lastName != null && !"".equals(lastName))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String> get("lastName")), '%' + lastName.toLowerCase() + '%'));
-      }
-      String telephone = this.example.getTelephone();
-      if (telephone != null && !"".equals(telephone))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String> get("telephone")), '%' + telephone.toLowerCase() + '%'));
-      }
-      String email = this.example.getEmail();
-      if (email != null && !"".equals(email))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String> get("email")), '%' + email.toLowerCase() + '%'));
-      }
-      String login = this.example.getLogin();
-      if (login != null && !"".equals(login))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String> get("login")), '%' + login.toLowerCase() + '%'));
-      }
+    public int getPageSize() {
+        return 10;
+    }
 
-      return predicatesList.toArray(new Predicate[predicatesList.size()]);
-   }
+    public Customer getExample() {
+        return this.example;
+    }
 
-   public List<Customer> getPageItems()
-   {
-      return this.pageItems;
-   }
+    public void setExample(Customer example) {
+        this.example = example;
+    }
 
-   public long getCount()
-   {
-      return this.count;
-   }
+    public String search() {
+        this.page = 0;
+        return null;
+    }
+
+    public void paginate() {
+
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+
+        // Populate this.count
+
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+        Root<Customer> root = countCriteria.from(Customer.class);
+        countCriteria = countCriteria.select(builder.count(root)).where(
+                getSearchPredicates(root));
+        this.count = this.entityManager.createQuery(countCriteria)
+                .getSingleResult();
+
+        // Populate this.pageItems
+
+        CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
+        root = criteria.from(Customer.class);
+        TypedQuery<Customer> query = this.entityManager.createQuery(criteria
+                .select(root).where(getSearchPredicates(root)));
+        query.setFirstResult(this.page * getPageSize()).setMaxResults(
+                getPageSize());
+        this.pageItems = query.getResultList();
+    }
+
+    private Predicate[] getSearchPredicates(Root<Customer> root) {
+
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        List<Predicate> predicatesList = new ArrayList<Predicate>();
+
+        String firstName = this.example.getFirstName();
+        if (firstName != null && !"".equals(firstName)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("firstName")), '%' + firstName.toLowerCase() + '%'));
+        }
+        String lastName = this.example.getLastName();
+        if (lastName != null && !"".equals(lastName)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("lastName")), '%' + lastName.toLowerCase() + '%'));
+        }
+        String telephone = this.example.getTelephone();
+        if (telephone != null && !"".equals(telephone)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("telephone")), '%' + telephone.toLowerCase() + '%'));
+        }
+        String email = this.example.getEmail();
+        if (email != null && !"".equals(email)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("email")), '%' + email.toLowerCase() + '%'));
+        }
+        String login = this.example.getLogin();
+        if (login != null && !"".equals(login)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("login")), '%' + login.toLowerCase() + '%'));
+        }
+
+        return predicatesList.toArray(new Predicate[predicatesList.size()]);
+    }
 
    /*
     * Support listing and POSTing back Customer entities (e.g. from inside an
     * HtmlSelectOneMenu)
     */
 
-   public List<Customer> getAll()
-   {
+    public List<Customer> getPageItems() {
+        return this.pageItems;
+    }
 
-      CriteriaQuery<Customer> criteria = this.entityManager
-            .getCriteriaBuilder().createQuery(Customer.class);
-      return this.entityManager.createQuery(
-            criteria.select(criteria.from(Customer.class))).getResultList();
-   }
+    public long getCount() {
+        return this.count;
+    }
 
-   @Resource
-   private SessionContext sessionContext;
+    public List<Customer> getAll() {
 
-   public Converter getConverter()
-   {
-
-      final CustomerBean ejbProxy = this.sessionContext.getBusinessObject(CustomerBean.class);
-
-      return new Converter()
-      {
-
-         @Override
-         public Object getAsObject(FacesContext context,
-               UIComponent component, String value)
-         {
-
-            return ejbProxy.findById(Long.valueOf(value));
-         }
-
-         @Override
-         public String getAsString(FacesContext context,
-               UIComponent component, Object value)
-         {
-
-            if (value == null)
-            {
-               return "";
-            }
-
-            return String.valueOf(((Customer) value).getId());
-         }
-      };
-   }
+        CriteriaQuery<Customer> criteria = this.entityManager
+                .getCriteriaBuilder().createQuery(Customer.class);
+        return this.entityManager.createQuery(
+                criteria.select(criteria.from(Customer.class))).getResultList();
+    }
 
    /*
     * Support adding children to bidirectional, one-to-many tables
     */
 
-   private Customer add = new Customer();
+    public Converter getConverter() {
 
-   public Customer getAdd()
-   {
-      return this.add;
-   }
+        final CustomerBean ejbProxy = this.sessionContext.getBusinessObject(CustomerBean.class);
 
-   public Customer getAdded()
-   {
-      Customer added = this.add;
-      this.add = new Customer();
-      return added;
-   }
+        return new Converter() {
+
+            @Override
+            public Object getAsObject(FacesContext context,
+                                      UIComponent component, String value) {
+
+                return ejbProxy.findById(Long.valueOf(value));
+            }
+
+            @Override
+            public String getAsString(FacesContext context,
+                                      UIComponent component, Object value) {
+
+                if (value == null) {
+                    return "";
+                }
+
+                return String.valueOf(((Customer) value).getId());
+            }
+        };
+    }
+
+    public Customer getAdd() {
+        return this.add;
+    }
+
+    public Customer getAdded() {
+        Customer added = this.add;
+        this.add = new Customer();
+        return added;
+    }
 }
