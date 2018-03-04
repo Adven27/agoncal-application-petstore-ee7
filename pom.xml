@@ -15,8 +15,10 @@
     <version.log4j>2.8.2</version.log4j>
     <!-- Test -->
     <version.junit>4.12</version.junit>
-    <version.arquillian>1.1.15.2</version.arquillian>
-    <version.arquillian.wildfly>2.0.2.Final</version.arquillian.wildfly>
+    <version.arquillian>1.1.15.0</version.arquillian>
+    <version.arquillian.wildfly>2.1.0.Final</version.arquillian.wildfly>
+    <version.arquillian.weblogic>1.0.1.Final</version.arquillian.weblogic>
+    <version.arquillian.weblogic.embedded>1.0.1.Final</version.arquillian.weblogic.embedded>
     <version.shrinkwrap>1.2.6</version.shrinkwrap>
     <version.arquillian.rest>1.0.0.Alpha4</version.arquillian.rest>
     <version.resteasy>3.1.4.Final</version.resteasy>
@@ -115,6 +117,11 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>eclipselink</artifactId>
+      <version>2.6.0</version>
+    </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-annotations</artifactId>
@@ -245,6 +252,15 @@
           </dependency>
         </dependencies>
       </plugin>
+      <plugin>
+        <groupId>org.apache.openejb.maven</groupId>
+        <artifactId>tomee-maven-plugin</artifactId>
+        <version>1.7.1</version>
+        <configuration>
+          <tomeeVersion>1.7.1</tomeeVersion>
+          <tomeeClassifier>plus</tomeeClassifier>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -274,58 +290,150 @@
       </dependencies>
     </profile>
 
-  <profile>
-    <id>arquillian-wildfly-managed</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>${version.maven.dependency.plugin}</version>
-          <executions>
-            <execution>
-              <id>unpack</id>
-              <phase>process-test-classes</phase>
-              <goals>
-                <goal>unpack</goal>
-              </goals>
-              <configuration>
-                <artifactItems>
-                  <artifactItem>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-dist</artifactId>
-                    <version>${version.wildfly}</version>
-                    <type>zip</type>
-                    <overWrite>false</overWrite>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                  </artifactItem>
-                </artifactItems>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${version.maven.surefire.plugin}</version>
-          <configuration>
-            <skipTests>false</skipTests>
-            <systemPropertyVariables>
-              <arquillian.launch>arquillian-wildfly-managed</arquillian.launch>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-    <dependencies>
-      <dependency>
-        <groupId>org.wildfly.arquillian</groupId>
-        <artifactId>wildfly-arquillian-container-managed</artifactId>
-        <version>${version.arquillian.wildfly}</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </profile>
+    <profile>
+      <id>arquillian-wildfly-managed</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${version.maven.dependency.plugin}</version>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.wildfly</groupId>
+                      <artifactId>wildfly-dist</artifactId>
+                      <version>${version.wildfly}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${project.build.directory}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${version.maven.surefire.plugin}</version>
+            <configuration>
+              <skipTests>false</skipTests>
+              <systemPropertyVariables>
+                <arquillian.launch>arquillian-wildfly-managed</arquillian.launch>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-managed</artifactId>
+          <version>${version.arquillian.wildfly}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>arquillian-wls-managed</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${version.maven.surefire.plugin}</version>
+            <configuration>
+              <skipTests>false</skipTests>
+              <systemPropertyVariables>
+                <arquillian.launch>arquillian-wls-managed</arquillian.launch>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.jboss.arquillian.container</groupId>
+          <artifactId>arquillian-wls-managed-12.1.2</artifactId>
+          <version>1.0.1.Final</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>arquillian-wls-embedded</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <skip>false</skip>
+              <!-- 80M is the default size of the permanent generation. Insufficient for embedded WLS 12c -->
+              <argLine>-XX:MaxPermSize=128M</argLine>
+              <!-- Disable assertions otherwise an assertionerror involving the WLS management runtime is thrown -->
+              <enableAssertions>false</enableAssertions>
+              <!-- Add the weblogic.jar to the classpath.
+               Contains the embedded EJB SPI provider implementation in it's manifest classpath -->
+              <additionalClasspathElements>
+                <additionalClasspathElement>${env.WL_HOME}/server/lib/weblogic.jar
+                </additionalClasspathElement>
+              </additionalClasspathElements>
+              <!-- Exclude the JEE 6 APIs since they do not have method bodies -->
+              <classpathDependencyExcludes>
+                <classpathDependencyExcludes>javax:javaee-api</classpathDependencyExcludes>
+              </classpathDependencyExcludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.jboss.arquillian.container</groupId>
+          <artifactId>arquillian-wls-embedded-12.1</artifactId>
+          <version>1.0.1.Final</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>tomee-embedded</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <dependencies>
+        <!--This has most of the needed dependencies : JPA, EJB, Java EE 6... -->
+        <dependency>
+          <groupId>org.apache.openejb</groupId>
+          <artifactId>javaee-api</artifactId>
+          <version>${version.openejb.javaee-api}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.myfaces.core</groupId>
+          <artifactId>myfaces-api</artifactId>
+          <version>${version.myfaces}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.openejb</groupId>
+          <artifactId>arquillian-openejb-embedded-4</artifactId>
+          <version>${version.openejb}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
 
 

@@ -6,10 +6,41 @@
     <container qualifier="arquillian-wildfly-managed">
         <configuration>
             <property name="jbossHome">target/wildfly-11.0.0.Final</property>
-            <property name="javaVmArguments">-Xmx1024m -Xnoagent -Djava.compiler=NONE -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+            <property name="javaVmArguments">-Xmx1024m -Xnoagent -Djava.compiler=NONE -Xdebug
+                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
             </property>
             <property name="allowConnectingToRunningServer">true</property>
         </configuration>
     </container>
-
+    <container qualifier="arquillian-wls-embedded">
+        <configuration>
+            <property name="outputToConsole">true</property>
+        </configuration>
+    </container>
+    <container qualifier="arquillian-wls-managed">
+        <configuration>
+            <property name="middlewareHome">/opt/wls1212/wls1212_dev</property>
+            <property name="wlHome">/opt/wls1211/wls1212_dev/wlserver</property>
+            <property name="domainDirectory">/opt/wls1212/wls1212_domains/base_domain</property>
+            <property name="adminUrl">t3://localhost:7001</property>
+            <property name="adminUserName">dev</property>
+            <property name="adminPassword"></property>
+            <property name="target">AdminServer</property>
+        </configuration>
+    </container>
+    <container qualifier="tomee" default="true">
+        <configuration>
+            <property name="httpPort">-1</property>
+            <property name="stopPort">-1</property>
+            <!--Optional Container Properties-->
+            <property name="properties">
+                aproperty=something
+            </property>
+            <!--Optional Remote Adapter Deployer Properties
+            <property name="deployerProperties">
+                aproperty=something
+            </property>
+            -->
+        </configuration>
+    </container>
 </arquillian>
