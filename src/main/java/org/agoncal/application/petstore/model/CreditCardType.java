@@ -2,16 +2,15 @@ package org.agoncal.application.petstore.model;
 
 /**
  * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
+ * http://www.antoniogoncalves.org
+ * --
  */
 
-public enum CreditCardType
-{
+public enum CreditCardType {
 
-   // ======================================
-   // =             Constants              =
-   // ======================================
+    // ======================================
+    // =             Constants              =
+    // ======================================
 
-   VISA, MASTER_CARD, AMERICAN_EXPRESS
+    VISA, MASTER_CARD, AMERICAN_EXPRESS
 }

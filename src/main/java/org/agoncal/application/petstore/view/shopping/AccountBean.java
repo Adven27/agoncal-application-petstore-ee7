@@ -1,5 +1,7 @@
 package org.agoncal.application.petstore.view.shopping;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.agoncal.application.petstore.model.Customer;
 import org.agoncal.application.petstore.service.CustomerService;
 import org.agoncal.application.petstore.util.Loggable;
@@ -12,15 +14,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import java.io.Serializable;
-
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
 
 @Named
 @SessionScoped
@@ -28,30 +23,11 @@ import java.io.Serializable;
 @CatchException
 public class AccountBean extends AbstractBean implements Serializable {
 
-    // ======================================
-    // =             Attributes             =
-    // ======================================
+    @Inject private CustomerService customerService;
+    @Inject private CredentialsBean credentials;
+    @Inject private Conversation conversation;
 
-    @Inject
-    private CustomerService customerService;
-
-    @Inject
-    private CredentialsBean credentials;
-
-    @Inject
-    private Conversation conversation;
-
-    @Produces
-    @LoggedIn
-    private Customer loggedinCustomer;
-
-    @Inject
-    @SessionScoped
-    private transient LoginContext loginContext;
-
-    // ======================================
-    // =              Public Methods        =
-    // ======================================
+    @Produces @LoggedIn @Getter @Setter private Customer loggedinCustomer;
 
     public String doLogin() throws LoginException {
         if (credentials.getLogin() == null || "".equals(credentials.getLogin())) {
@@ -117,13 +93,5 @@ public class AccountBean extends AbstractBean implements Serializable {
 
     public boolean isLoggedIn() {
         return loggedinCustomer != null;
-    }
-
-    public Customer getLoggedinCustomer() {
-        return loggedinCustomer;
-    }
-
-    public void setLoggedinCustomer(Customer loggedinCustomer) {
-        this.loggedinCustomer = loggedinCustomer;
     }
 }

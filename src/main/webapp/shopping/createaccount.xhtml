@@ -46,7 +46,8 @@
                         <h:message for="telephone" style="color: red;"/>
 
                         <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
-                        <p:calendar id="dateOfBirth" display="inline" navigator="true" showOn="button" pattern="d/M/yyyy"
+                        <p:calendar id="dateOfBirth" display="inline" navigator="true" showOn="button"
+                                    pattern="d/M/yyyy"
                                     value="#{accountBean.loggedinCustomer.dateOfBirth}"/>
                         <h:message for="dateOfBirth" style="color: red;"/>
 
@@ -81,9 +82,12 @@
                         <h:message for="zipcode" style="color: red;"/>
 
                         <h:outputText value="* #{i18n.address_country}:"/>
-                        <h:selectOneMenu id="country"  converter="#{countryBean.converter}" value="#{accountBean.loggedinCustomer.homeAddress.country}" class="form-control">
+                        <h:selectOneMenu id="country" converter="#{countryBean.converter}"
+                                         value="#{accountBean.loggedinCustomer.homeAddress.country}"
+                                         class="form-control">
                             <f:selectItem/>
-                            <f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{countryBean.all}" var="_item"/>
+                            <f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}"
+                                           value="#{countryBean.all}" var="_item"/>
                         </h:selectOneMenu>
                         <h:message for="country" style="color: red;"/>
 
@@ -93,7 +97,8 @@
             </div>
 
             <div>
-                <h:commandButton value="#{i18n.submit}" action="#{accountBean.doCreateCustomer}" type="submit" class="btn btn-primary"/>
+                <h:commandButton value="#{i18n.submit}" action="#{accountBean.doCreateCustomer}" type="submit"
+                                 class="btn btn-primary"/>
             </div>
         </h:form>
 

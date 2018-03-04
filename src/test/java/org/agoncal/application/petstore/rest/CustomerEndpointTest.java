@@ -26,60 +26,55 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class CustomerEndpointTest
-{
+public class CustomerEndpointTest {
 
-   // ======================================
-   // =             Attributes             =
-   // ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-   @ArquillianResource
-   private URI baseURL;
+    @ArquillianResource
+    private URI baseURL;
 
-   // ======================================
-   // =             Deployment             =
-   // ======================================
+    // ======================================
+    // =             Deployment             =
+    // ======================================
 
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
-   {
-      return ShrinkWrap.create(WebArchive.class)
-            .addClass(RestApplication.class)
-            .addClass(CustomerEndpoint.class)
-            .addClass(Customer.class)
-            .addClass(Address.class)
-            .addClass(Country.class)
-            .addClass(UserRole.class)
-            .addClass(ValidationException.class)
-            .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
-            .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-   }
+    @Deployment(testable = false)
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class)
+                .addClass(RestApplication.class)
+                .addClass(CustomerEndpoint.class)
+                .addClass(Customer.class)
+                .addClass(Address.class)
+                .addClass(Country.class)
+                .addClass(UserRole.class)
+                .addClass(ValidationException.class)
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
 
-   // ======================================
-   // =             Test Cases             =
-   // ======================================
+    // ======================================
+    // =             Test Cases             =
+    // ======================================
 
-   @Test
-   public void should_be_deployed()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("customers");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
-   }
+    @Test
+    public void should_be_deployed() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("customers");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
+    }
 
-   @Test
-   public void should_produce_json()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("customers");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_JSON).get().getStatus());
-   }
+    @Test
+    public void should_produce_json() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("customers");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_JSON).get().getStatus());
+    }
 
-   @Test
-   public void should_produce_xml()
-   {
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(baseURL).path("rest").path("customers");
-      assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
-   }
+    @Test
+    public void should_produce_xml() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(baseURL).path("rest").path("customers");
+        assertEquals(Response.Status.OK.getStatusCode(), target.request(MediaType.APPLICATION_XML).get().getStatus());
+    }
 }

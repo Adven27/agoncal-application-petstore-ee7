@@ -2,26 +2,14 @@ package org.agoncal.application.petstore.view;
 
 import org.agoncal.application.petstore.util.Loggable;
 
-import javax.faces.bean.RequestScoped;
-import javax.inject.Named;
+import javax.enterprise.inject.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
-
-@Named
-@RequestScoped
+@Model
 @Loggable
 @CatchException
 public class DebugBean extends AbstractBean {
-
-    // ======================================
-    // =              Public Methods        =
-    // ======================================
 
     public List<String> getThreadStack() {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

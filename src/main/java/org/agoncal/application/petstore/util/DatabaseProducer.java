@@ -4,19 +4,7 @@ import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
-
-public class DatabaseProducer 
-{
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
-
+public class DatabaseProducer {
     @Produces
     @PersistenceContext(unitName = "applicationPetstorePU")
     private EntityManager em;

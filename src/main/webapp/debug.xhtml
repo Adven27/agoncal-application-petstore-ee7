@@ -88,8 +88,8 @@
         <h2>Request attributes</h2>
         <h:panelGrid columns="2">
             <c:forEach items="#{requestScope}" var="entry">
-                <h:outputLabel value="#{entry.key}" />
-                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}" />
+                <h:outputLabel value="#{entry.key}"/>
+                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}"/>
             </c:forEach>
         </h:panelGrid>
 
@@ -106,8 +106,8 @@
         <h2>Session attributes</h2>
         <h:panelGrid columns="2">
             <c:forEach items="#{sessionScope}" var="entry">
-                <h:outputLabel value="#{entry.key}" />
-                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}" />
+                <h:outputLabel value="#{entry.key}"/>
+                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}"/>
             </c:forEach>
         </h:panelGrid>
 
@@ -131,8 +131,8 @@
         <h2>Application attributes</h2>
         <h:panelGrid columns="2">
             <c:forEach items="#{applicationScope}" var="entry">
-                <h:outputLabel value="#{entry.key}" />
-                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}" />
+                <h:outputLabel value="#{entry.key}"/>
+                <h:inputText class="form-control" pt:disabled="disabled" value="#{entry.value}"/>
             </c:forEach>
         </h:panelGrid>
 
@@ -140,7 +140,7 @@
         <h:panelGrid columns="2">
             <h:outputLabel value="Working directory"/>
             <h:inputText class="form-control" pt:disabled="disabled" value="#{debugBean.workingDirectory}"
-                          size="64"/>
+                         size="64"/>
             <h:outputLabel value="InetAddress.getLocalHost()"/>
             <h:inputText class="form-control" pt:disabled="disabled" value="#{debugBean.workingDirectory}"/>
             <h:outputLabel value="InetAddress.getAllByName(null)"/>
@@ -158,7 +158,7 @@
         <h2>Thread stack</h2>
         <h:panelGrid columns="1">
             <c:forEach items="#{debugBean.threadStack}" var="entry">
-                <h:outputLabel value="#{entry}" />
+                <h:outputLabel value="#{entry}"/>
             </c:forEach>
         </h:panelGrid>
 

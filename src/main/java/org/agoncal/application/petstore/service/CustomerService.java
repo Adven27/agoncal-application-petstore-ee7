@@ -16,143 +16,98 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
-
 @Stateless
 @LocalBean
 @Loggable
-public class CustomerService extends AbstractService<Customer> implements Serializable
-{
+public class CustomerService extends AbstractService<Customer> implements Serializable {
 
-   // ======================================
-   // =            Constructors            =
-   // ======================================
+    public CustomerService() {
+        super(Customer.class);
+    }
 
-   public CustomerService()
-   {
-      super(Customer.class);
-   }
+    public boolean doesLoginAlreadyExist(@NotNull String login) {
 
-   // ======================================
-   // =             Attributes             =
-   // ======================================
+        // Login has to be unique
+        TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN, Customer.class);
+        typedQuery.setParameter("login", login);
+        try {
+            typedQuery.getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 
+    public Customer createCustomer(@NotNull Customer customer) {
+        Country country = entityManager.find(Country.class, customer.getHomeAddress().getCountry().getId());
+        customer.getHomeAddress().setCountry(country);
+        entityManager.persist(customer);
+        return customer;
+    }
 
-   // ======================================
-   // =              Public Methods        =
-   // ======================================
+    public Customer findCustomer(@NotNull String login) {
+        TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN, Customer.class);
+        typedQuery.setParameter("login", login);
 
-   public boolean doesLoginAlreadyExist(@NotNull String login)
-   {
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
-      // Login has to be unique
-      TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN, Customer.class);
-      typedQuery.setParameter("login", login);
-      try
-      {
-         typedQuery.getSingleResult();
-         return true;
-      }
-      catch (NoResultException e)
-      {
-         return false;
-      }
-   }
+    public Customer findCustomer(@NotNull String login, @NotNull String password) {
+        TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN_PASSWORD, Customer.class);
+        typedQuery.setParameter("login", login);
+        typedQuery.setParameter("password", password);
 
-   public Customer createCustomer(@NotNull Customer customer)
-   {
-      Country country = entityManager.find(Country.class, customer.getHomeAddress().getCountry().getId());
-      customer.getHomeAddress().setCountry(country);
-      entityManager.persist(customer);
-      return customer;
-   }
+        return typedQuery.getSingleResult();
+    }
 
-   public Customer findCustomer(@NotNull String login)
-   {
-      TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN, Customer.class);
-      typedQuery.setParameter("login", login);
+    public List<Customer> findAllCustomers() {
+        TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_ALL, Customer.class);
+        return typedQuery.getResultList();
+    }
 
-      try
-      {
-         return typedQuery.getSingleResult();
-      }
-      catch (NoResultException e)
-      {
-         return null;
-      }
-   }
+    public Customer updateCustomer(@NotNull Customer customer) {
+        entityManager.merge(customer);
+        return customer;
+    }
 
-   public Customer findCustomer(@NotNull String login, @NotNull String password)
-   {
-      TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_BY_LOGIN_PASSWORD, Customer.class);
-      typedQuery.setParameter("login", login);
-      typedQuery.setParameter("password", password);
+    public void removeCustomer(@NotNull Customer customer) {
+        entityManager.remove(entityManager.merge(customer));
+    }
 
-      return typedQuery.getSingleResult();
-   }
+    public Country findCountry(@NotNull Long countryId) {
+        return entityManager.find(Country.class, countryId);
+    }
 
-   public List<Customer> findAllCustomers()
-   {
-      TypedQuery<Customer> typedQuery = entityManager.createNamedQuery(Customer.FIND_ALL, Customer.class);
-      return typedQuery.getResultList();
-   }
+    @Override
+    protected Predicate[] getSearchPredicates(Root<Customer> root, Customer example) {
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-   public Customer updateCustomer(@NotNull Customer customer)
-   {
-      entityManager.merge(customer);
-      return customer;
-   }
+        String firstName = example.getFirstName();
+        if (firstName != null && !"".equals(firstName)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("firstName")), '%' + firstName.toLowerCase() + '%'));
+        }
+        String lastName = example.getLastName();
+        if (lastName != null && !"".equals(lastName)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("lastName")), '%' + lastName.toLowerCase() + '%'));
+        }
+        String telephone = example.getTelephone();
+        if (telephone != null && !"".equals(telephone)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("telephone")), '%' + telephone.toLowerCase() + '%'));
+        }
+        String email = example.getEmail();
+        if (email != null && !"".equals(email)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("email")), '%' + email.toLowerCase() + '%'));
+        }
+        String login = example.getLogin();
+        if (login != null && !"".equals(login)) {
+            predicatesList.add(builder.like(builder.lower(root.<String>get("login")), '%' + login.toLowerCase() + '%'));
+        }
 
-   public void removeCustomer(@NotNull Customer customer)
-   {
-      entityManager.remove(entityManager.merge(customer));
-   }
-
-   public Country findCountry(@NotNull Long countryId)
-   {
-      return entityManager.find(Country.class, countryId);
-   }
-
-   // ======================================
-   // =         Protected methods          =
-   // ======================================
-
-   @Override
-   protected Predicate[] getSearchPredicates(Root<Customer> root, Customer example)
-   {
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-      List<Predicate> predicatesList = new ArrayList<Predicate>();
-
-      String firstName = example.getFirstName();
-      if (firstName != null && !"".equals(firstName))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String>get("firstName")), '%' + firstName.toLowerCase() + '%'));
-      }
-      String lastName = example.getLastName();
-      if (lastName != null && !"".equals(lastName))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String>get("lastName")), '%' + lastName.toLowerCase() + '%'));
-      }
-      String telephone = example.getTelephone();
-      if (telephone != null && !"".equals(telephone))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String>get("telephone")), '%' + telephone.toLowerCase() + '%'));
-      }
-      String email = example.getEmail();
-      if (email != null && !"".equals(email))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String>get("email")), '%' + email.toLowerCase() + '%'));
-      }
-      String login = example.getLogin();
-      if (login != null && !"".equals(login))
-      {
-         predicatesList.add(builder.like(builder.lower(root.<String>get("login")), '%' + login.toLowerCase() + '%'));
-      }
-
-      return predicatesList.toArray(new Predicate[predicatesList.size()]);
-   }
+        return predicatesList.toArray(new Predicate[predicatesList.size()]);
+    }
 }

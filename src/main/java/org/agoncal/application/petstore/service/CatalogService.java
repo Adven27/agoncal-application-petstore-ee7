@@ -13,26 +13,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
-
 @Stateless
 @Loggable
 public class CatalogService implements Serializable {
 
-    // ======================================
-    // =             Attributes             =
-    // ======================================
-
-    @Inject
-    private EntityManager em;
-
-    // ======================================
-    // =              Public Methods        =
-    // ======================================
+    @Inject private EntityManager em;
 
     public Category findCategory(@NotNull Long categoryId) {
         return em.find(Category.class, categoryId);

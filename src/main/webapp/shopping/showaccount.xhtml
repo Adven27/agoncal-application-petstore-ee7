@@ -30,29 +30,29 @@
 
                         <h:outputText value="#{i18n.customer_firstName}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.firstName}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.customer_lastName}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.lastName}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.customer_email}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.email}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.customer_telephone}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.telephone}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.dateOfBirth}" class="form-control"
-                                      pt:disabled="disabled">
+                                     pt:disabled="disabled">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:inputText>
 
                         <h:outputText value="#{i18n.customer_age}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.age}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                     </h:panelGrid>
                 </div>
@@ -66,27 +66,28 @@
                     <h:panelGrid columns="2">
                         <h:outputText value="#{i18n.address_street1}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street1}" class="form-control"
-                                      pt:disabled="disabled" size="36"/>
+                                     pt:disabled="disabled" size="36"/>
 
                         <h:outputText value="#{i18n.address_street2}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street2}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.address_city}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.city}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.address_state}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.state}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.address_zipcode}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.zipcode}" class="form-control"
-                                      pt:disabled="disabled"/>
+                                     pt:disabled="disabled"/>
 
                         <h:outputText value="#{i18n.address_country}:"/>
-                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.country.printableName}" class="form-control"
-                                      pt:disabled="disabled"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.country.printableName}"
+                                     class="form-control"
+                                     pt:disabled="disabled"/>
                     </h:panelGrid>
                 </div>
             </div>

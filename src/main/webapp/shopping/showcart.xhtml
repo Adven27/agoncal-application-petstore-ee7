@@ -14,41 +14,41 @@
     </ui:define>
 
     <ui:define name="subheader">
-        <h:outputText value="#{i18n.shoppingCart_empty}" rendered="#{shoppingCartBean.shoppingCartIsEmpty()}"/>
+        <h:outputText value="#{i18n.shoppingCart_empty}" rendered="#{cartView.shoppingCartIsEmpty()}"/>
     </ui:define>
 
     <ui:define name="main">
 
-        <h:form rendered="#{!shoppingCartBean.shoppingCartIsEmpty()}">
-            <h:dataTable value="#{shoppingCartBean.cartItems}" var="oneItem" styleClass="table">
+        <h:form rendered="#{!cartView.shoppingCartIsEmpty()}">
+            <h:dataTable value="#{cartView.cartItems}" var="it" styleClass="table">
                 <h:column>
-                    <h:outputText value="#{oneItem.item.product.name}"/>
+                    <h:outputText value="#{it.item.product.name}"/>
                     <br/>
-                    <h:commandLink action="#{catalogBean.doFindItem}">
-                        <h:outputText value="#{oneItem.item.name}"/>
-                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                    <h:commandLink action="#{cartView.doFindItem}">
+                        <h:outputText value="#{it.item.name}"/>
+                        <f:param name="itemId" value="#{it.item.id}"/>
                     </h:commandLink>
                 </h:column>
                 <h:column>
-                    <h:commandLink action="#{shoppingCartBean.updateQuantity}" styleClass="arrow_refresh">
+                    <h:commandLink action="#{cartView.updateQuantity}" styleClass="arrow_refresh">
                         <h:outputText value="#{i18n.update}"/>
-                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                        <f:param name="itemId" value="#{it.item.id}"/>
                     </h:commandLink>
                 </h:column>
                 <h:column>
-                    <h:inputText value="#{oneItem.quantity}"/>
+                    <h:inputText value="#{it.quantity}"/>
                 </h:column>
                 <h:column>
                     x
-                    <h:outputText value="#{oneItem.item.unitCost}"/> $
+                    <h:outputText value="#{it.item.unitCost}"/> $
                 </h:column>
                 <h:column>
-                    = <h:outputText value="#{oneItem.subTotal}"/> $
+                    = <h:outputText value="#{it.subTotal}"/> $
                 </h:column>
                 <h:column>
-                    <h:commandLink action="#{shoppingCartBean.removeItemFromCart}" styleClass="remove-from-cart">
+                    <h:commandLink action="#{cartView.removeItemFromCart}" styleClass="remove-from-cart">
                         <h:outputText value="#{i18n.remove}"/>
-                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                        <f:param name="itemId" value="#{it.item.id}"/>
                     </h:commandLink>
                 </h:column>
             </h:dataTable>
@@ -57,8 +57,8 @@
 
             <div>
                 Total $
-                <h:outputText value="#{shoppingCartBean.total}"/>
-                <h:commandLink action="#{shoppingCartBean.checkout}" value="Check Out"
+                <h:outputText value="#{cartView.total}"/>
+                <h:commandLink action="#{cartView.checkout}" value="Check Out"
                                styleClass="checkout-cart"/>
             </div>
         </h:form>

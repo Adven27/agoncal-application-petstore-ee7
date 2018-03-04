@@ -4,35 +4,16 @@ import org.agoncal.application.petstore.util.Loggable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
-/**
- * @author Antonio Goncalves
- *         http://www.antoniogoncalves.org
- *         --
- */
+import static javax.faces.application.FacesMessage.*;
 
 @Loggable
 public abstract class AbstractBean {
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
-
-    @Inject
-    private transient Logger logger;
-
-    // ======================================
-    // =          Protected Methods         =
-    // ======================================
-
-    private String getMessage(FacesContext facesContext, String msgKey, Object... args) {
-        Locale locale = facesContext.getViewRoot().getLocale();
+    private String getMessage(String msgKey, Locale locale, Object... args) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ResourceBundle bundle = ResourceBundle.getBundle("Messages", locale, classLoader);
         String msgValue = bundle.getString(msgKey);
@@ -41,17 +22,18 @@ public abstract class AbstractBean {
 
     protected void addInformationMessage(String message, Object... args) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getMessage(context, message, args), null));
+        context.addMessage(null, new FacesMessage(SEVERITY_INFO, getMessage(message, context.getViewRoot().getLocale(), args), null));
     }
 
     protected void addWarningMessage(String message, Object... args) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, getMessage(context, message, args), null));
+        context.addMessage(null, new FacesMessage(SEVERITY_WARN, getMessage(message, context.getViewRoot().getLocale(), args), null));
     }
 
     protected void addErrorMessage(String message, Object... args) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getMessage(context, message, args), null));
+        Locale locale = context.getViewRoot().getLocale();
+        context.addMessage(null, new FacesMessage(SEVERITY_ERROR, getMessage(message, locale, args), null));
     }
 
     protected String getParam(String param) {

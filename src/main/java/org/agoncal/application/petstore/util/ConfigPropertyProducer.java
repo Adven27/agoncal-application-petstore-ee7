@@ -5,17 +5,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * @author blep
- *         Date: 16/02/12
- *         Time: 20:56
- */
-
 public class ConfigPropertyProducer {
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
 
     private static Properties props;
 
@@ -27,10 +17,6 @@ public class ConfigPropertyProducer {
             e.printStackTrace();
         }
     }
-
-    // ======================================
-    // =          Business methods          =
-    // ======================================
 
     @Produces
     @ConfigProperty

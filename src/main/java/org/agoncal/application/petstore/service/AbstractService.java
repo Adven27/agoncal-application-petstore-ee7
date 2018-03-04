@@ -1,5 +1,7 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.petstore.util.Loggable;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -8,118 +10,87 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import org.agoncal.application.petstore.util.Loggable;
 
 @Loggable
-public abstract class AbstractService<T>
-{
+public abstract class AbstractService<T> {
 
-   // ======================================
-   // =             Attributes             =
-   // ======================================
+    @PersistenceContext(unitName = "applicationPetstorePU")
+    protected EntityManager entityManager;
 
-   @PersistenceContext(unitName = "applicationPetstorePU")
-   protected EntityManager entityManager;
+    private Class<T> entityClass;
 
-   private Class<T> entityClass;
+    public AbstractService() {
+    }
 
-   // ======================================
-   // =            Constructors            =
-   // ======================================
+    public AbstractService(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
 
-   public AbstractService()
-   {
-   }
+    public T persist(T entity) {
+        entityManager.persist(entity);
+        return entity;
+    }
 
-   public AbstractService(Class<T> entityClass)
-   {
-      this.entityClass = entityClass;
-   }
+    public T findById(Long id) {
+        return entityManager.find(entityClass, id);
+    }
 
-   // ======================================
-   // =          Business methods          =
-   // ======================================
+    public void remove(T entity) {
+        entityManager.remove(entityManager.merge(entity));
+    }
 
-   public T persist(T entity)
-   {
-      entityManager.persist(entity);
-      return entity;
-   }
+    public T merge(T entity) {
+        return entityManager.merge(entity);
+    }
 
-   public T findById(Long id)
-   {
-      return entityManager.find(entityClass, id);
-   }
+    public List<T> listAll(Integer startPosition, Integer maxResult) {
+        TypedQuery<T> findAllQuery = getListAllQuery();
+        if (startPosition != null) {
+            findAllQuery.setFirstResult(startPosition);
+        }
+        if (maxResult != null) {
+            findAllQuery.setMaxResults(maxResult);
+        }
+        final List<T> results = findAllQuery.getResultList();
+        return results;
+    }
 
-   public void remove(T entity)
-   {
-      entityManager.remove(entityManager.merge(entity));
-   }
+    public List<T> listAll() {
+        return getListAllQuery().getResultList();
+    }
 
-   public T merge(T entity)
-   {
-      return entityManager.merge(entity);
-   }
+    public TypedQuery<T> getListAllQuery() {
+        CriteriaQuery<T> criteria = entityManager.getCriteriaBuilder().createQuery(entityClass);
+        return entityManager.createQuery(criteria.select(criteria.from(entityClass)));
+    }
 
-   public List<T> listAll(Integer startPosition, Integer maxResult)
-   {
-      TypedQuery<T> findAllQuery = getListAllQuery();
-      if (startPosition != null)
-{
-         findAllQuery.setFirstResult(startPosition);
-      }
-      if (maxResult != null)
-      {
-         findAllQuery.setMaxResults(maxResult);
-      }
-      final List<T> results = findAllQuery.getResultList();
-      return results;
-   }
+    public long count(T example) {
 
-   public List<T> listAll()
-   {
-      return getListAllQuery().getResultList();
-   }
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-   public TypedQuery<T> getListAllQuery()
-   {
-      CriteriaQuery<T> criteria = entityManager.getCriteriaBuilder().createQuery(entityClass);
-      return entityManager.createQuery(criteria.select(criteria.from(entityClass)));
-   }
+        // Populate count
 
-   public long count(T example)
-   {
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+        Root<T> root = countCriteria.from(entityClass);
+        countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root, example));
+        long count = entityManager.createQuery(countCriteria).getSingleResult();
+        return count;
+    }
 
-      CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+    public List<T> page(T example, int page, int pageSize) {
 
-      // Populate count
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-      CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<T> root = countCriteria.from(entityClass);
-      countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root, example));
-      long count = entityManager.createQuery(countCriteria).getSingleResult();
-      return count;
-   }
+        // Populate pageItems
 
-   public List<T> page(T example, int page, int pageSize)
-   {
+        CriteriaQuery<T> criteria = builder.createQuery(entityClass);
+        Root<T> root = criteria.from(entityClass);
+        TypedQuery<T> query = entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root, example)));
+        query.setFirstResult(page * pageSize).setMaxResults(pageSize);
+        List<T> pageItems = query.getResultList();
+        return pageItems;
 
-      CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+    }
 
-      // Populate pageItems
-
-      CriteriaQuery<T> criteria = builder.createQuery(entityClass);
-      Root<T> root = criteria.from(entityClass);
-      TypedQuery<T> query = entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root, example)));
-      query.setFirstResult(page * pageSize).setMaxResults(pageSize);
-      List<T> pageItems = query.getResultList();
-      return pageItems;
-
-   }
-
-   // ======================================
-   // =         Protected methods          =
-   // ======================================
-
-   protected abstract Predicate[] getSearchPredicates(Root<T> root, T example);
+    protected abstract Predicate[] getSearchPredicates(Root<T> root, T example);
 }
