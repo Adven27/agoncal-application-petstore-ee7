@@ -2,12 +2,14 @@ package org.agoncal.application.petstore.service;
 
 import org.agoncal.application.petstore.model.Category;
 import org.agoncal.application.petstore.model.Item;
+import org.agoncal.application.petstore.model.LocaleEntity;
 import org.agoncal.application.petstore.model.Product;
 import org.agoncal.application.petstore.util.Loggable;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -67,6 +69,7 @@ public class CatalogService implements Serializable {
     }
 
     public List<Product> findProducts(@NotNull String categoryName) {
+        List<LocaleEntity> resultList = em.createNamedQuery(LocaleEntity.GET_ALL_QUERY, LocaleEntity.class).getResultList();
         TypedQuery<Product> typedQuery = em.createNamedQuery(Product.FIND_BY_CATEGORY_NAME, Product.class);
         typedQuery.setParameter("pname", categoryName);
         return typedQuery.getResultList();
