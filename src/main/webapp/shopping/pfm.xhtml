@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <ui:param name="pageTitle" value="#{i18n.showProducts_productForCategory}}"/>
+    <ui:define name="header">#{i18n.showProducts_productForCategory}</ui:define>
+    <ui:define name="subheader"/>
+
+    <ui:define name="main">
+        <h:dataTable value="#{pfmView.transactions}" var="trn" rendered="#{pfmView.transactions.size() > 0}"
+                     styleClass="it-transactions table">
+            <h:column><h:outputText value="#{trn.category}"/></h:column>
+            <h:column><h:outputText value="#{trn.sum}"/></h:column>
+            <h:column><h:outputText value="#{trn.date}"/></h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

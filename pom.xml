@@ -219,6 +219,12 @@
             <version>1.7.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -340,41 +346,14 @@
                 </dependency>
             </dependencies>
         </profile>
-
         <profile>
-            <id>tomee-embedded</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
+            <id>E2E</id>
             <dependencies>
-                <!--        <dependency>
-                            <groupId>org.apache.openejb</groupId>
-                            <artifactId>arquillian-tomee-embedded</artifactId>
-                            <version>1.7.1</version> &lt;!&ndash;Current version&ndash;&gt;
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.openejb</groupId>
-                            <artifactId>tomee-embedded</artifactId>
-                            <version>1.7.1</version>
-                        </dependency>-->
-                <!--This has most of the needed dependencies : JPA, EJB, Java EE 6... -->
                 <dependency>
-                    <groupId>org.apache.openejb</groupId>
-                    <artifactId>javaee-api</artifactId>
-                    <version>RELEASE</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.myfaces.core</groupId>
-                    <artifactId>myfaces-api</artifactId>
-                    <version>RELEASE</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.openejb</groupId>
-                    <artifactId>arquillian-openejb-embedded-4</artifactId>
-                    <version>RELEASE</version>
-                    <scope>test</scope>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-all</artifactId>
+                    <version>1.10.19</version>
+                    <scope>compile</scope>
                 </dependency>
             </dependencies>
         </profile>
