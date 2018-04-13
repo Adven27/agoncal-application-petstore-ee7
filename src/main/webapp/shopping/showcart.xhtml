@@ -7,14 +7,14 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.shoppingCart}"/>
+    <ui:param name="pageTitle" value="#{msg.shoppingCart}"/>
 
     <ui:define name="header">
-        #{i18n.shoppingCart}
+        #{msg.shoppingCart}
     </ui:define>
 
     <ui:define name="subheader">
-        <h:outputText value="#{i18n.shoppingCart_empty}" rendered="#{cartView.shoppingCartIsEmpty()}"/>
+        <h:outputText value="#{msg.shoppingCart_empty}" rendered="#{cartView.shoppingCartIsEmpty()}"/>
     </ui:define>
 
     <ui:define name="main">
@@ -31,7 +31,7 @@
                 </h:column>
                 <h:column>
                     <h:commandLink action="#{cartView.updateQuantity}" styleClass="arrow_refresh">
-                        <h:outputText value="#{i18n.update}"/>
+                        <h:outputText value="#{msg.update}"/>
                         <f:param name="itemId" value="#{it.item.id}"/>
                     </h:commandLink>
                 </h:column>
@@ -47,7 +47,7 @@
                 </h:column>
                 <h:column>
                     <h:commandLink action="#{cartView.removeItemFromCart}" styleClass="remove-from-cart">
-                        <h:outputText value="#{i18n.remove}"/>
+                        <h:outputText value="#{msg.remove}"/>
                         <f:param name="itemId" value="#{it.item.id}"/>
                     </h:commandLink>
                 </h:column>

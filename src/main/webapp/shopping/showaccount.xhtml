@@ -8,10 +8,10 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.accounts}"/>
+    <ui:param name="pageTitle" value="#{msg.accounts}"/>
 
     <ui:define name="header">
-        #{i18n.accounts}
+        #{msg.accounts}
     </ui:define>
 
     <ui:define name="main">
@@ -20,37 +20,37 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">#{i18n.confirmorder_personalInformation}</h3>
+                    <h3 class="panel-title">#{msg.confirmorder_personalInformation}</h3>
                 </div>
                 <div class="panel-body">
                     <h:panelGrid columns="2">
-                        <h:outputText value="#{i18n.customer_login}:"/>
+                        <h:outputText value="#{msg.customer_login}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.login}" class="form-control"
                                      pt:disabled="disabled" size="30"/>
 
-                        <h:outputText value="#{i18n.customer_firstName}:"/>
+                        <h:outputText value="#{msg.customer_firstName}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.firstName}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.customer_lastName}:"/>
+                        <h:outputText value="#{msg.customer_lastName}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.lastName}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.customer_email}:"/>
+                        <h:outputText value="#{msg.customer_email}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.email}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.customer_telephone}:"/>
+                        <h:outputText value="#{msg.customer_telephone}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.telephone}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
+                        <h:outputText value="#{msg.customer_dateOfBirth}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.dateOfBirth}" class="form-control"
                                      pt:disabled="disabled">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:inputText>
 
-                        <h:outputText value="#{i18n.customer_age}:"/>
+                        <h:outputText value="#{msg.customer_age}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.age}" class="form-control"
                                      pt:disabled="disabled"/>
 
@@ -60,31 +60,31 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">#{i18n.address}</h3>
+                    <h3 class="panel-title">#{msg.address}</h3>
                 </div>
                 <div class="panel-body">
                     <h:panelGrid columns="2">
-                        <h:outputText value="#{i18n.address_street1}:"/>
+                        <h:outputText value="#{msg.address_street1}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street1}" class="form-control"
                                      pt:disabled="disabled" size="36"/>
 
-                        <h:outputText value="#{i18n.address_street2}:"/>
+                        <h:outputText value="#{msg.address_street2}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street2}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.address_city}:"/>
+                        <h:outputText value="#{msg.address_city}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.city}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.address_state}:"/>
+                        <h:outputText value="#{msg.address_state}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.state}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.address_zipcode}:"/>
+                        <h:outputText value="#{msg.address_zipcode}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.zipcode}" class="form-control"
                                      pt:disabled="disabled"/>
 
-                        <h:outputText value="#{i18n.address_country}:"/>
+                        <h:outputText value="#{msg.address_country}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.country.printableName}"
                                      class="form-control"
                                      pt:disabled="disabled"/>
@@ -94,7 +94,7 @@
 
             <div>
                 <h:commandLink action="/shopping/updateaccount" class="btn btn-primary">
-                    <h:outputText value="#{i18n.showAccount_edit}"/>
+                    <h:outputText value="#{msg.showAccount_edit}"/>
                 </h:commandLink>
             </div>
         </h:form>

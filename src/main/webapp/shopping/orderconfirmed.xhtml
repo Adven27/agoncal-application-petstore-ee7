@@ -6,10 +6,10 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.orderConfirmed_yourOrderIsComplete}"/>
+    <ui:param name="pageTitle" value="#{msg.orderConfirmed_yourOrderIsComplete}"/>
 
     <ui:define name="header">
-        #{i18n.orderConfirmed_yourOrderIsComplete}
+        #{msg.orderConfirmed_yourOrderIsComplete}
     </ui:define>
 
     <ui:define name="main">
@@ -42,12 +42,12 @@
             </div>
         </h:form>
 
-        <legend>#{i18n.orderConfirmed_yourOrderIdIs} : <span class="at-orderId">#{cartView.order.id}</span>
+        <legend>#{msg.orderConfirmed_yourOrderIdIs} : <span class="at-orderId">#{cartView.order.id}</span>
         </legend>
 
-        <p style="margin-top: 15px">#{i18n.orderConfirmed_msg1}</p>
+        <p style="margin-top: 15px">#{msg.orderConfirmed_msg1}</p>
 
-        <p style="margin-top: 15px">#{i18n.orderConfirmed_msg2}</p>
+        <p style="margin-top: 15px">#{msg.orderConfirmed_msg2}</p>
 
     </ui:define>
 </ui:composition>

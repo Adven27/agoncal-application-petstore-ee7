@@ -11,15 +11,15 @@
         <f:viewParam name="productId" value="#{itemsView.items}" required="true" converter="#{fromProduct}"/>
     </f:metadata>
 
-    <ui:param name="pageTitle" value="#{i18n.showItems_itemForProduct} : #{itemsView.items.getProduct().name}"/>
+    <ui:param name="pageTitle" value="#{msg.showItems_itemForProduct} : #{itemsView.items.getProduct().name}"/>
 
     <ui:define name="header">
-        #{i18n.showItems_itemForProduct} : #{itemsView.items.getProduct().name}
+        #{msg.showItems_itemForProduct} : #{itemsView.items.getProduct().name}
     </ui:define>
 
     <ui:define name="main">
 
-        <h:outputText value="#{i18n.noItemsFound}"
+        <h:outputText value="#{msg.noItemsFound}"
                       rendered="#{itemsView.items == null || itemsView.items.size() ==0}"/>
 
         <h:dataTable value="#{itemsView.items}" var="it" rendered="#{itemsView.items.size() > 0}"

@@ -32,6 +32,7 @@
         <version.jquery>2.2.4</version.jquery>
         <version.primefaces>6.1</version.primefaces>
         <version.primefaces-themes>1.0.10</version.primefaces-themes>
+        <primefaces.extensions.version>6.1.0</primefaces.extensions.version>
         <version.fontawesome>4.7.0</version.fontawesome>
         <!-- Other -->
         <version.swagger>1.5.17</version.swagger>
@@ -153,6 +154,11 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>${primefaces.extensions.version}</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
@@ -331,7 +337,7 @@
                         <configuration>
                             <skipTests>false</skipTests>
                             <systemPropertyVariables>
-                                <arquillian.launch>arquillian-wildfly-managed</arquillian.launch>
+                                <arquillian.launch>wildfly-managed</arquillian.launch>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

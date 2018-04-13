@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	class="zero-margin zero-padding">
+
+<f:view>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title><ui:insert name="pageTitle">Empty Page</ui:insert></title>
+	<f:metadata>
+		<ui:insert name="metadata" />
+	</f:metadata>
+
+    <h:head>
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+        <h:outputScript library="bootstrap" name="bootstrap.min.js" />
+        <h:outputStylesheet library="bootstrap" name="bootstrap.min.css"/>
+        <ui:insert name="head" />
+    </h:head>
+
+	<h:body styleClass="zero-margin zero-padding setfont bg bg--body">
+		<f:facet name="last">
+			<ui:insert name="theme" />
+		</f:facet>
+		<div class="page">
+			<ui:insert name="pageContent" />
+            <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"
+                          onerror="PF('statusDialog').hide()"/>
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false"
+                      showHeader="false"/>
+		</div>
+	</h:body>
+
+</f:view>
+
+</html>

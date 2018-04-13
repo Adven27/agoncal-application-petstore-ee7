@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/templates/empty.xhtml">
+
+	<ui:define name="head">
+		<h:outputScript library="primefaces-extensions" name="primefaces-extensions.js" />
+		<h:outputStylesheet library="primefaces-extensions" name="timer/timer.css" />
+		<h:outputScript library="primefaces-extensions" name="timer/timer.js" />
+		<h:outputStylesheet library="primefaces" name="inputnumber/inputnumber.css" />
+		<h:outputScript library="primefaces" name="inputnumber/inputnumber.js" />
+        <h:outputScript library="js" name="jquery.nicescroll.min.js" />
+        <h:outputScript library="js" name="bpc-primefaces-extensions.js" />
+        <ui:insert name="pageHead" />
+	</ui:define>
+
+	<ui:define name="theme">
+		<h:outputStylesheet name="css/bpc.css" library="bpc" />
+		<h:outputStylesheet name="css/font-awesome.css" library="bpc" />
+	</ui:define>
+
+	<ui:define name="pageContent">
+		<a name="top" id="top"> </a>
+        <div class="wrapper wrapper--flexbox">
+            <ui:insert name="header">
+                <ui:include src="/WEB-INF/templates/header.xhtml" />
+            </ui:insert>
+            <div class="wrapper__content">
+                <h:panelGroup layout="block" styleClass="container-embedded container-main container--enable-formatting-context">
+                    <h:panelGroup layout="block" id="workspace" styleClass="workspace container-embedded container--enable-formatting-context #{workspaceClass}">
+                        <h:panelGroup layout="block" id="menu" styleClass="menu">
+                            <h:panelGroup layout="block" styleClass="container">
+                                <ui:insert name="menu">
+                                    <ui:include src="/WEB-INF/templates/menu.xhtml" />
+                                </ui:insert>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup id="pageContentWrapper" layout="block" styleClass="container-embedded pageContentWrapper">
+                            <ui:insert name="mainPageContent" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </div>
+            <div class="wrapper__footer">
+                <ui:insert name="footer">
+                    <div class="footer">
+                        <div class="footer__info">
+                            <ui:include src="/WEB-INF/templates/footer.xhtml" />
+                        </div>
+                    </div>
+                </ui:insert>
+            </div>
+        </div>
+	</ui:define>
+</ui:composition>

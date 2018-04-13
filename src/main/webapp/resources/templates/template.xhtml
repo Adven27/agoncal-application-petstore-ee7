@@ -79,7 +79,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
                                     <h:link outcome="/shopping/showaccount"
-                                            value="#{i18n.welcome} #{accountBean.loggedinCustomer.firstName}"
+                                            value="#{msg.welcome} #{accountBean.loggedinCustomer.firstName}"
                                             rendered="#{accountBean.loggedIn}">
                                         <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
                                         <i class="fa fa-user" aria-hidden="true"></i>
@@ -89,18 +89,18 @@
                                     <h:commandLink action="#{accountBean.doLogout}"
                                                    rendered="#{accountBean.loggedIn}">
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        <h:outputText value="${i18n.logOut}"/>
+                                        <h:outputText value="${msg.logOut}"/>
                                     </h:commandLink>
                                 </li>
                                 <li>
-                                    <h:link outcome="/shopping/signon" value="#{i18n.logIn}"
+                                    <h:link outcome="/shopping/signon" value="#{msg.logIn}"
                                             rendered="#{!accountBean.loggedIn}">
                                         <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
                                         <i class="fa fa-sign-in" aria-hidden="true"></i>
                                     </h:link>
                                 </li>
                                 <li>
-                                    <h:link outcome="/shopping/showcart" value="#{i18n.shoppingCart}"
+                                    <h:link outcome="/shopping/showcart" value="#{msg.shoppingCart}"
                                             rendered="#{!cartView.shoppingCartIsEmpty()}">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -112,7 +112,7 @@
                                         <div class="form-group">
                                             <h:inputText class="form-control" value="#{catalogBean.keyword}"/>
                                         </div>
-                                        <h:commandButton action="#{catalogBean.doSearch}" value="#{i18n.search}"
+                                        <h:commandButton action="#{catalogBean.doSearch}" value="#{msg.search}"
                                                          class="btn btn-default"/>
                                     </div>
                                 </li>

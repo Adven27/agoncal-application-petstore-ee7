@@ -9,10 +9,10 @@
                 xmlns:forgeview="http://jboss.org/forge/view"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.createAccount_createYourAccount}"/>
+    <ui:param name="pageTitle" value="#{msg.createAccount_createYourAccount}"/>
 
     <ui:define name="header">
-        #{i18n.createAccount_createYourAccount}
+        #{msg.createAccount_createYourAccount}
     </ui:define>
 
     <ui:define name="main">
@@ -21,31 +21,31 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">#{i18n.createAccount_personalInformation}</h3>
+                    <h3 class="panel-title">#{msg.createAccount_personalInformation}</h3>
                 </div>
                 <div class="panel-body">
                     <h:panelGrid columns="3">
-                        <h:outputText value="#{i18n.customer_login}:"/>
+                        <h:outputText value="#{msg.customer_login}:"/>
                         <h:inputText value="#{accountBean.loggedinCustomer.login}" readonly="true"/>
                         <h:outputText value=""/>
 
-                        <h:outputText value="*#{i18n.customer_firstName}:"/>
+                        <h:outputText value="*#{msg.customer_firstName}:"/>
                         <h:inputText id="firstName" value="#{accountBean.loggedinCustomer.firstName}"/>
                         <h:message for="firstName" style="color: red;"/>
 
-                        <h:outputText value="*#{i18n.customer_lastName}:"/>
+                        <h:outputText value="*#{msg.customer_lastName}:"/>
                         <h:inputText id="lastName" value="#{accountBean.loggedinCustomer.lastName}"/>
                         <h:message for="lastName" style="color: red;"/>
 
-                        <h:outputText value="#{i18n.customer_email}:"/>
+                        <h:outputText value="#{msg.customer_email}:"/>
                         <h:inputText id="email" value="#{accountBean.loggedinCustomer.email}"/>
                         <h:message for="email" style="color: red;"/>
 
-                        <h:outputText value="#{i18n.customer_telephone}:"/>
+                        <h:outputText value="#{msg.customer_telephone}:"/>
                         <h:inputText id="telephone" value="#{accountBean.loggedinCustomer.telephone}"/>
                         <h:message for="telephone" style="color: red;"/>
 
-                        <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
+                        <h:outputText value="#{msg.customer_dateOfBirth}:"/>
                         <p:calendar id="dateOfBirth" display="inline" navigator="true" showOn="button"
                                     pattern="d/M/yyyy"
                                     value="#{accountBean.loggedinCustomer.dateOfBirth}"/>
@@ -57,31 +57,31 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">#{i18n.address}</h3>
+                    <h3 class="panel-title">#{msg.address}</h3>
                 </div>
                 <div class="panel-body">
                     <h:panelGrid columns="3">
-                        <h:outputText value="*#{i18n.address_street1}:"/>
+                        <h:outputText value="*#{msg.address_street1}:"/>
                         <h:inputText id="street1" value="#{accountBean.loggedinCustomer.homeAddress.street1}"/>
                         <h:message for="street1" style="color: red;"/>
 
-                        <h:outputText value="#{i18n.address_street2}:"/>
+                        <h:outputText value="#{msg.address_street2}:"/>
                         <h:inputText id="street2" value="#{accountBean.loggedinCustomer.homeAddress.street2}"/>
                         <h:message for="street2" style="color: red;"/>
 
-                        <h:outputText value="*#{i18n.address_city}:"/>
+                        <h:outputText value="*#{msg.address_city}:"/>
                         <h:inputText id="city" value="#{accountBean.loggedinCustomer.homeAddress.city}"/>
                         <h:message for="city" style="color: red;"/>
 
-                        <h:outputText value="#{i18n.address_state}:"/>
+                        <h:outputText value="#{msg.address_state}:"/>
                         <h:inputText id="state" value="#{accountBean.loggedinCustomer.homeAddress.state}"/>
                         <h:message for="state" style="color: red;"/>
 
-                        <h:outputText value="*#{i18n.address_zipcode}:"/>
+                        <h:outputText value="*#{msg.address_zipcode}:"/>
                         <h:inputText id="zipcode" value="#{accountBean.loggedinCustomer.homeAddress.zipcode}"/>
                         <h:message for="zipcode" style="color: red;"/>
 
-                        <h:outputText value="* #{i18n.address_country}:"/>
+                        <h:outputText value="* #{msg.address_country}:"/>
                         <h:selectOneMenu id="country" converter="#{countryBean.converter}"
                                          value="#{accountBean.loggedinCustomer.homeAddress.country}"
                                          class="form-control">
@@ -97,7 +97,7 @@
             </div>
 
             <div>
-                <h:commandButton value="#{i18n.submit}" action="#{accountBean.doCreateCustomer}" type="submit"
+                <h:commandButton value="#{msg.submit}" action="#{accountBean.doCreateCustomer}" type="submit"
                                  class="btn btn-primary"/>
             </div>
         </h:form>

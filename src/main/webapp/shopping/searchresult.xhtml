@@ -7,14 +7,14 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.searchResult_searchFor} #{catalogBean.keyword}"/>
+    <ui:param name="pageTitle" value="#{msg.searchResult_searchFor} #{catalogBean.keyword}"/>
 
     <ui:define name="header">
-        #{i18n.searchResult_searchFor} : #{catalogBean.keyword}
+        #{msg.searchResult_searchFor} : #{catalogBean.keyword}
     </ui:define>
 
     <ui:define name="subheader">
-        <h:outputText value="#{i18n.noItemsFound}"
+        <h:outputText value="#{msg.noItemsFound}"
                       rendered="#{catalogBean.items == null || catalogBean.items.size() ==0}"/>
     </ui:define>
 
@@ -48,7 +48,7 @@
                 <h:form>
                     <h:commandLink action="#{cartView.addItemToCart}" styleClass="add-to-cart"
                                    rendered="#{accountBean.loggedIn}">
-                        <h:outputText value="#{i18n.searchResult_addToCart}"/>
+                        <h:outputText value="#{msg.searchResult_addToCart}"/>
                         <f:param name="itemId" value="#{it.id}"/>
                     </h:commandLink>
                 </h:form>

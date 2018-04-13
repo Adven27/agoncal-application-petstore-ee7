@@ -7,32 +7,32 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/resources/templates/templateShopping.xhtml">
 
-    <ui:param name="pageTitle" value="#{i18n.signon_signIn}"/>
+    <ui:param name="pageTitle" value="#{msg.signon_signIn}"/>
 
     <ui:define name="header">
-        #{i18n.signon_signIn}
+        #{msg.signon_signIn}
     </ui:define>
 
     <ui:define name="main">
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">#{i18n.signon_returningCustomer}</h3>
+                <h3 class="panel-title">#{msg.signon_returningCustomer}</h3>
             </div>
             <div class="panel-body">
                 <h:form>
                     <h:panelGrid columns="2">
-                        <h:outputLabel value="#{i18n.customer_login}:" for="login"/>
+                        <h:outputLabel value="#{msg.customer_login}:" for="login"/>
                         <h:inputText id="login" value="#{credentialsBean.login}" maxlength="8" size="12"
                                      styleClass="at-login"/>
-                        <h:outputLabel value="#{i18n.customer_password}:" for="password"/>
+                        <h:outputLabel value="#{msg.customer_password}:" for="password"/>
                         <h:inputSecret id="password" value="#{credentialsBean.password}" maxlength="10" size="12"
                                        styleClass="at-password"/>
                         <f:facet name="footer">
                             <h:outputLabel value="user/user - admin/admin"/>
                         </f:facet>
                     </h:panelGrid>
-                    <h:commandButton value="#{i18n.signon_signIn}" action="#{accountBean.doLogin}"
+                    <h:commandButton value="#{msg.signon_signIn}" action="#{accountBean.doLogin}"
                                      class="btn btn-primary"
                                      type="submit"/>
                 </h:form>
@@ -41,19 +41,19 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">#{i18n.signon_signup}</h3>
+                <h3 class="panel-title">#{msg.signon_signup}</h3>
             </div>
             <div class="panel-body">
                 <h:form>
                     <h:panelGrid columns="2">
-                        <h:outputLabel value="#{i18n.customer_login}:" for="newlogin"/>
+                        <h:outputLabel value="#{msg.customer_login}:" for="newlogin"/>
                         <h:inputText id="newlogin" value="#{credentialsBean.login}" maxlength="10" size="12"/>
-                        <h:outputLabel value="#{i18n.customer_password}:" for="newpassword"/>
+                        <h:outputLabel value="#{msg.customer_password}:" for="newpassword"/>
                         <h:inputSecret id="newpassword" value="#{credentialsBean.password}" maxlength="10" size="12"/>
-                        <h:outputLabel value="#{i18n.customer_password} (#{i18n.again}):" for="newpasswordagain"/>
+                        <h:outputLabel value="#{msg.customer_password} (#{msg.again}):" for="newpasswordagain"/>
                         <h:inputSecret id="newpasswordagain" value="#{credentialsBean.password2}" maxlength="10"
                                        size="12"/>
-                        <h:commandButton value="#{i18n.signon_new}" action="#{accountBean.doCreateNewAccount}"
+                        <h:commandButton value="#{msg.signon_new}" action="#{accountBean.doCreateNewAccount}"
                                          class="btn btn-primary"
                                          type="submit"/>
                     </h:panelGrid>

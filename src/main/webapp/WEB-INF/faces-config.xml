@@ -9,7 +9,11 @@
         </locale-config>
         <resource-bundle>
             <base-name>Messages</base-name>
-            <var>i18n</var>
+            <var>msg</var>
         </resource-bundle>
     </application>
+    <factory>
+        <render-kit-factory>org.agoncal.application.petstore.view.Html5RenderKitFactory</render-kit-factory>
+    </factory>
+
 </faces-config>

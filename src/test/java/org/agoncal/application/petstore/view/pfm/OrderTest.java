@@ -68,7 +68,7 @@ public class OrderTest {
     @RunAsClient
     @InSequence(2)
     public void start() throws Exception {
-        open("/applicationPetstore/shopping/main.xhtml");
+        open("/applicationPetstore/index.html");
         $(linkText("PFM")).click();
         shouldHaveListOfTransactions();
     }

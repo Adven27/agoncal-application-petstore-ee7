@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/basic.xhtml">
+
+    <ui:define name="pageTitle">
+        <h:outputText value="PFM HEADER"/>
+    </ui:define>
+
+    <ui:define name="mainPageContent">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-1 hidden-sm hidden-md"></div>
+                <div class="col-lg-10 col-sm-12">
+                    <div class="container-embedded panel panel--content">
+                        <h2 class="text text--normal">
+                            <h:outputText value="#{msg['page.pfm.pageHeader']}"/>
+                        </h2>
+
+                        <div class="separator separator--header"></div>
+
+                        <div class="container-embedded container--row">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h:dataTable value="#{pfmView.transactions}" var="trn" rendered="#{pfmView.transactions.size() > 0}"
+                                                 styleClass="it-transactions table">
+                                        <h:column><h:outputText value="#{trn.category}"/></h:column>
+                                        <h:column><h:outputText value="#{trn.sum}"/></h:column>
+                                        <h:column><h:outputText value="#{trn.date}"/></h:column>
+                                    </h:dataTable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 hidden-sm hidden-md"></div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

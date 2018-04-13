@@ -18,7 +18,7 @@
     </ui:define>
 
     <ui:define name="subheader">
-        <h:outputText value="#{i18n.noItemsFound}" rendered="#{itemView.item == null}"/>
+        <h:outputText value="#{msg.noItemsFound}" rendered="#{itemView.item == null}"/>
     </ui:define>
 
     <ui:define name="main">
@@ -32,14 +32,14 @@
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="#{i18n.item_unitCost}:"/>
+                    <h:outputText value="#{msg.item_unitCost}:"/>
                     <h:outputText value="#{itemView.item.unitCost}"/> $
                 </h:column>
 
                 <h:column>
                     <h:commandLink action="#{itemView.addToCart}" styleClass="add-to-cart"
                                    rendered="#{itemView.canAdd}">
-                        <h:outputText value="#{i18n.searchResult_addToCart}"/>
+                        <h:outputText value="#{msg.searchResult_addToCart}"/>
                         <f:param name="itemId" value="#{itemView.item.id}"/>
                     </h:commandLink>
                 </h:column>
