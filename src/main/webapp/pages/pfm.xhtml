@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/templates/basic.xhtml">
 
     <ui:define name="pageTitle">
@@ -25,8 +23,10 @@
                         <div class="container-embedded container--row">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h:dataTable value="#{pfmView.transactions}" var="trn" rendered="#{pfmView.transactions.size() > 0}"
-                                                 styleClass="it-transactions table">
+                                    <h:dataTable value="#{pfmView.transactions}" var="trn"
+                                                 rendered="#{not empty pfmView.transactions}"
+                                                 styleClass="it-transactions table"
+                                                 columnClasses="it-cat, it-sum, it-date">
                                         <h:column><h:outputText value="#{trn.category}"/></h:column>
                                         <h:column><h:outputText value="#{trn.sum}"/></h:column>
                                         <h:column><h:outputText value="#{trn.date}"/></h:column>

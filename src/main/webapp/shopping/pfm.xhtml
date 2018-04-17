@@ -11,8 +11,8 @@
     <ui:define name="subheader"/>
 
     <ui:define name="main">
-        <h:dataTable value="#{pfmView.transactions}" var="trn" rendered="#{pfmView.transactions.size() > 0}"
-                     styleClass="it-transactions table">
+        <h:dataTable value="#{pfmView.transactions}" var="trn" rendered="#{not empty pfmView.transactions}"
+                     styleClass="it-transactions table" columnClasses="it-cat, it-sum, it-date">
             <h:column><h:outputText value="#{trn.category}"/></h:column>
             <h:column><h:outputText value="#{trn.sum}"/></h:column>
             <h:column><h:outputText value="#{trn.date}"/></h:column>

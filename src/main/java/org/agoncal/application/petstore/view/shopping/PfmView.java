@@ -1,6 +1,7 @@
 package org.agoncal.application.petstore.view.shopping;
 
 import lombok.Getter;
+import org.agoncal.application.petstore.service.TransactionDAO;
 import org.agoncal.application.petstore.util.Loggable;
 import org.agoncal.application.petstore.view.CatchException;
 
