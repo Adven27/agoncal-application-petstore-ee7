@@ -1,8 +1,6 @@
-package org.agoncal.application.petstore.view.pfm;
+package it;
 
 import com.codeborne.selenide.Configuration;
-import com.google.common.collect.Table;
-import e2e.DataSets;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.agoncal.application.petstore.service.TransactionDAO;
 import org.agoncal.application.petstore.service.TransactionDAOImpl;
@@ -12,7 +10,6 @@ import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.embedded.EmbeddedMaven;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,31 +18,23 @@ import javax.enterprise.inject.Specializes;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.codeborne.selenide.Selenide.*;
-import static e2e.DataSets.data;
-import static e2e.MyConditions.dataEqualTo;
+import static com.codeborne.selenide.Selenide.open;
+import static it.DataSets.data;
+import static it.PageObjects.menu;
+import static it.PageObjects.table;
+import static it.TableConditions.dataEqualTo;
 import static java.lang.Double.parseDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.openqa.selenium.By.linkText;
 
 @RunWith(Arquillian.class)
-public class OrderTest {
+public class PfmViewIT extends BaseIT {
     private static TransactionDAO mockedDAO = mock(TransactionDAO.class);
-    private static String[] dataSet = {"CAT1", "10.0", "CAT2", "20.0"};
+    private static String[] expected = {"CAT1", "10.0", "CAT2", "20.0"};
 
     @Deployment
     public static WebArchive createDeployment() {
-        return ((WebArchive) EmbeddedMaven.forProject("pom.xml")
-                .useMaven3Version("3.3.9")
-                .setGoals("package")
-                .setQuiet()
-                .setProfiles("E2E")
-                .ignoreFailure()
-                .build()
-                .getDefaultBuiltArchive()).addClass(DataSets.class);
-        // .addAsWebInfResource("META-INF/persistence.xml", "classes/META-INF/persistence.xml");
-        //.addAsResource("persistence.xml", "META-INF/persistence.xml");//replace with test persistence
+        return deployment();
     }
 
     @BeforeClass
@@ -65,27 +54,27 @@ public class OrderTest {
     @InSequence(2)
     public void thenFrontShouldDisplayEmptyTable() throws Exception {
         open("/applicationPetstore/index.html");
-        $(linkText("PFM")).click();
-        $$(".it-transactions tr").shouldHaveSize(0);
+        menu("PFM").click();
+        table("it-transactions").shouldHaveSize(0);
     }
 
     @Test
     @InSequence(3)
     public void whenBackHasTransactions() {
-        when(mockedDAO.getTransactions()).thenReturn(transactionsFrom(data(dataSet)));
+        when(mockedDAO.getTransactions()).thenReturn(transactionsFrom(expected));
     }
 
     @Test
     @RunAsClient
     @InSequence(4)
     public void thenFrontShouldDisplayThemInTable() throws Exception {
-        $(linkText("PFM")).click();
-        $$(".it-transactions tr").shouldHave(dataEqualTo(dataSet));
+        menu("PFM").click();
+        table("it-transactions").shouldHave(dataEqualTo(expected));
     }
 
-    private List<Transaction> transactionsFrom(Table<Integer, String, String> table) {
+    private List<Transaction> transactionsFrom(String... dataSet) {
         List<Transaction> t = new ArrayList<>();
-        for (Map.Entry<Integer, Map<String, String>> row : table.rowMap().entrySet()) {
+        for (Map.Entry<Integer, Map<String, String>> row : data(dataSet).rowMap().entrySet()) {
             t.add(new Transaction(
                     BigDecimal.valueOf(parseDouble(row.getValue().get("sum"))),
                     new Date(),

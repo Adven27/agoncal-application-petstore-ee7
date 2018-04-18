@@ -1,4 +1,4 @@
-package e2e;
+package it;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ex.UIAssertionError;
@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MyConditions {
+public class TableConditions {
 
     public static CollectionCondition dataEqualTo(String... data) {
         return dataEqualTo(DataSets.data(data));
