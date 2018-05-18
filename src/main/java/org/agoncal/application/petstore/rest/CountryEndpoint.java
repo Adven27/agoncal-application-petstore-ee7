@@ -13,28 +13,14 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 
-/**
- * @author Antonio Goncalves
- * http://www.antoniogoncalves.org
- * --
- */
-
 @Stateless
 @Path("/countries")
 @Loggable
 @Api("Country")
 public class CountryEndpoint {
 
-    // ======================================
-    // =             Attributes             =
-    // ======================================
-
     @PersistenceContext(unitName = "applicationPetstorePU")
     private EntityManager em;
-
-    // ======================================
-    // =          Business methods          =
-    // ======================================
 
     @POST
     @Consumes({"application/xml", "application/json"})

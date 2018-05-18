@@ -15,7 +15,8 @@ public class TransactionDAOImpl implements TransactionDAO {
     public List<Transaction> getTransactions() {
         return asList(
                 new Transaction(BigDecimal.valueOf(1000), new Date(), "Category 1"),
-                new Transaction(BigDecimal.valueOf(100), new Date(), "Category 2")
+                new Transaction(BigDecimal.valueOf(200), new Date(), "Category 2"),
+                new Transaction(BigDecimal.valueOf(220), new Date(), "Category 2")
         );
     }
 }

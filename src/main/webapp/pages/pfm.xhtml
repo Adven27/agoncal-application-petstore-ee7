@@ -11,23 +11,34 @@
 
     <ui:define name="mainPageContent">
         <div class="container">
+            <script>
+                function extLegend() {
+                    this.cfg.legend = {
+                        show: true,
+                        location: 's',
+                        placement: 'outsideGrid'
+                    };
+                }
+            </script>
             <div class="row">
-                <div class="col-lg-1 hidden-sm hidden-md"></div>
+                <div class="col-lg-1 hidden-sm hidden-md"/>
                 <div class="col-lg-10 col-sm-12">
                     <div class="container-embedded panel panel--content">
                         <h2 class="text text--normal">
                             <h:outputText value="#{msg['page.pfm.pageHeader']}"/>
                         </h2>
 
-                        <div class="separator separator--header"></div>
+                        <div class="separator separator--header"/>
 
                         <div class="container-embedded container--row">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <p:chart type="donut" model="#{pfmView.pie}">
-                                        <p:ajax event="itemSelect" listener="#{pfmView.itemSelect}"/>
+                                    <p:growl id="growl" showDetail="true"/>
+                                    <p:chart type="donut" model="#{pfmView.donut}">
+                                        <p:ajax event="itemSelect" update="growl, transactions"
+                                                listener="#{pfmView.itemSelect}"/>
                                     </p:chart>
-                                    <h:dataTable value="#{pfmView.transactions}" var="trn"
+                                    <h:dataTable id="transactions" value="#{pfmView.transactions}" var="trn"
                                                  rendered="#{not empty pfmView.transactions}"
                                                  styleClass="it-transactions table"
                                                  columnClasses="it-cat, it-sum, it-date">
@@ -40,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1 hidden-sm hidden-md"></div>
+                <div class="col-lg-1 hidden-sm hidden-md"/>
             </div>
         </div>
     </ui:define>
