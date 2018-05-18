@@ -11,6 +11,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,14 +22,15 @@ import java.util.Map;
 @ViewScoped
 @Named
 public class PfmView implements Serializable {
+    @Getter
+    private final DonutChartModel donut;
     private final List<Transaction> transactions;
-    @Getter private final DonutChartModel donut;
     private final LinkedHashMap<String, Number> cat2Sum;
     private String selectedCategory;
 
     @Inject
     public PfmView(TransactionDAO transactionDAO) {
-        transactions = transactionDAO.getTransactions();
+        transactions = transactionDAO.findAll();
         cat2Sum = getExpenseMap(transactions);
         donut = initChart(cat2Sum);
     }
@@ -64,25 +66,25 @@ public class PfmView implements Serializable {
     }
 
     private DonutChartModel initChart(Map<String, Number> circle) {
-        DonutChartModel pie = new DonutChartModel();
-        pie.addCircle(customizeExpenseMap(circle));
-        pie.setLegendPosition("e");
-        pie.setSliceMargin(3);
-        pie.setShowDataLabels(true);
-        pie.setExtender("extLegend");
-        pie.setDataFormat("value");
-//        donut.setDataLabelFormatString("%d%%");
-        pie.setShadow(true);
-        return pie;
+        DonutChartModel donut = new DonutChartModel();
+        donut.addCircle(customizeExpenseMap(circle));
+        donut.setLegendPosition("e");
+        donut.setSliceMargin(3);
+        donut.setShowDataLabels(true);
+        donut.setExtender("extLegend");
+        donut.setDataFormat("value");
+        donut.setShadow(true);
+        return donut;
     }
 
     private LinkedHashMap<String, Number> getExpenseMap(List<Transaction> transactions) {
         LinkedHashMap<String, Number> result = new LinkedHashMap<>();
         for (Transaction t : transactions) {
             Number old = result.get(t.getCategory());
+            BigDecimal amount = t.getAmount() == null ? BigDecimal.ZERO : t.getAmount();
             result.put(t.getCategory(), old == null
-                    ? t.getSum().doubleValue()
-                    : t.getSum().doubleValue() + old.doubleValue()
+                    ? amount.doubleValue()
+                    : amount.doubleValue() + old.doubleValue()
             );
         }
         return result;

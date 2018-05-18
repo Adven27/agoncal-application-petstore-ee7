@@ -1,11 +1,9 @@
 package org.agoncal.application.petstore.service;
 
 import liquibase.Liquibase;
-import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import liquibase.resource.ResourceAccessor;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -20,7 +18,7 @@ import java.sql.Connection;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 public class InitBean {
-    private static final String STAGE = "prod";
+    private static final String STAGE = "";
     private static final String CHANGELOG_FILE = "db/changelog/db.changelog-master.xml";
 
     @Resource
@@ -28,17 +26,17 @@ public class InitBean {
 
     @PostConstruct
     protected void bootstrap() {
-        ResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader());
         try (Connection connection = ds.getConnection()) {
-            JdbcConnection jdbcConnection = new JdbcConnection(connection);
-            Database db = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
-
-            Liquibase liquiBase = new Liquibase(CHANGELOG_FILE, resourceAccessor, db);
-            liquiBase.dropAll();
-            liquiBase.update(STAGE);
+            Liquibase lb = new Liquibase(
+                    CHANGELOG_FILE,
+                    new ClassLoaderResourceAccessor(getClass().getClassLoader()),
+                    DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
+            );
+            lb.validate();
+            //lb.dropAll();
+            lb.update(STAGE);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-
     }
 }

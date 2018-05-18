@@ -6,5 +6,5 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface TransactionDAO extends Serializable {
-    List<Transaction> getTransactions();
+    List<Transaction> findAll();
 }

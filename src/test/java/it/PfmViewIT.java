@@ -2,8 +2,8 @@ package it;
 
 import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import org.agoncal.application.petstore.service.DBTransactionDAO;
 import org.agoncal.application.petstore.service.TransactionDAO;
-import org.agoncal.application.petstore.service.TransactionDAOImpl;
 import org.agoncal.application.petstore.view.shopping.Transaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -15,15 +15,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.enterprise.inject.Specializes;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.open;
 import static it.DataSets.data;
 import static it.PageObjects.menu;
 import static it.PageObjects.table;
 import static it.TableConditions.dataEqualTo;
-import static java.lang.Double.parseDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +47,7 @@ public class PfmViewIT extends BaseIT {
     @Test
     @InSequence(1)
     public void whenNoTransactionsOnBack() {
-        when(mockedDAO.getTransactions()).thenReturn(Collections.<Transaction>emptyList());
+        when(mockedDAO.findAll()).thenReturn(Collections.<Transaction>emptyList());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class PfmViewIT extends BaseIT {
     @Test
     @InSequence(3)
     public void whenBackHasTransactions() {
-        when(mockedDAO.getTransactions()).thenReturn(transactionsFrom(expected));
+        when(mockedDAO.findAll()).thenReturn(transactionsFrom(expected));
     }
 
     @Test
@@ -75,20 +76,20 @@ public class PfmViewIT extends BaseIT {
     private List<Transaction> transactionsFrom(String... dataSet) {
         List<Transaction> t = new ArrayList<>();
         for (Map.Entry<Integer, Map<String, String>> row : data(dataSet).rowMap().entrySet()) {
-            t.add(new Transaction(
-                    BigDecimal.valueOf(parseDouble(row.getValue().get("sum"))),
-                    new Date(),
-                    row.getValue().get("cat")
-            ));
+            t.add(new Transaction());
         }
         return t;
     }
 
     @Specializes
-    public static class MockedTransactionDAO extends TransactionDAOImpl {
+    public static class MockedTransactionDAO extends DBTransactionDAO {
+        public MockedTransactionDAO() {
+            super(null);
+        }
+
         @Override
-        public List<Transaction> getTransactions() {
-            return mockedDAO.getTransactions();
+        public List<Transaction> findAll() {
+            return mockedDAO.findAll();
         }
     }
 }
