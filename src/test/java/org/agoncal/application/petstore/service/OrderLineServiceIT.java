@@ -1,13 +1,12 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.petstore.BaseServiceIT;
 import org.agoncal.application.petstore.model.Category;
 import org.agoncal.application.petstore.model.Item;
 import org.agoncal.application.petstore.model.OrderLine;
 import org.agoncal.application.petstore.model.Product;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,35 +18,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class OrderLineServiceTest {
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
+public class OrderLineServiceIT extends BaseServiceIT {
 
     @Inject
     private OrderLineService orderlineservice;
 
-    // ======================================
-    // =             Deployment             =
-    // ======================================
-
     @Deployment
     public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
+        return baseDeployment()
                 .addClass(AbstractService.class)
                 .addClass(OrderLineService.class)
                 .addClass(OrderLine.class)
                 .addClass(Category.class)
                 .addClass(Product.class)
-                .addClass(Item.class)
-                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addClass(Item.class);
     }
-
-    // ======================================
-    // =             Test Cases             =
-    // ======================================
 
     @Test
     public void should_be_deployed() {

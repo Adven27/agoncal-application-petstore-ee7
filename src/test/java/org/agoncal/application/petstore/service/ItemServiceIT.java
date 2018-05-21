@@ -1,12 +1,11 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.petstore.BaseServiceIT;
 import org.agoncal.application.petstore.model.Category;
 import org.agoncal.application.petstore.model.Item;
 import org.agoncal.application.petstore.model.Product;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,34 +17,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class ItemServiceTest {
-
-    // ======================================
-    // =             Attributes             =
-    // ======================================
+public class ItemServiceIT extends BaseServiceIT {
 
     @Inject
     private ItemService itemservice;
 
-    // ======================================
-    // =             Deployment             =
-    // ======================================
-
     @Deployment
     public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
+        return baseDeployment()
                 .addClass(AbstractService.class)
                 .addClass(ItemService.class)
                 .addClass(Item.class)
                 .addClass(Product.class)
-                .addClass(Category.class)
-                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addClass(Category.class);
     }
-
-    // ======================================
-    // =             Test Cases             =
-    // ======================================
 
     @Test
     public void should_be_deployed() {

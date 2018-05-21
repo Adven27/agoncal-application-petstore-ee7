@@ -1,11 +1,10 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.petstore.BaseServiceIT;
 import org.agoncal.application.petstore.exceptions.ValidationException;
 import org.agoncal.application.petstore.model.*;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -20,30 +19,29 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class PurchaseOrderServiceTest {
+public class PurchaseOrderServiceIT extends BaseServiceIT {
 
     @Inject
     private PurchaseOrderService purchaseorderservice;
 
     @Deployment
     public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-                .addClass(AbstractService.class)
-                .addClass(PurchaseOrderService.class)
-                .addClass(PurchaseOrder.class)
-                .addClass(Country.class)
-                .addClass(Address.class)
-                .addClass(Customer.class)
-                .addClass(CreditCard.class)
-                .addClass(CreditCardType.class)
-                .addClass(OrderLine.class)
-                .addClass(Category.class)
-                .addClass(Product.class)
-                .addClass(Item.class)
-                .addClass(UserRole.class)
-                .addClass(ValidationException.class)
-                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        return baseDeployment().addClasses(
+                AbstractService.class,
+                PurchaseOrderService.class,
+                PurchaseOrder.class,
+                Country.class,
+                Address.class,
+                Customer.class,
+                CreditCard.class,
+                CreditCardType.class,
+                OrderLine.class,
+                Category.class,
+                Product.class,
+                Item.class,
+                UserRole.class,
+                ValidationException.class
+        );
     }
 
     @Test
