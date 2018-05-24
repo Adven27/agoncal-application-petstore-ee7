@@ -2,9 +2,9 @@ package org.agoncal.application.petstore.view.shopping;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.agoncal.application.cfg.Loggable;
 import org.agoncal.application.petstore.model.Customer;
 import org.agoncal.application.petstore.service.CustomerService;
-import org.agoncal.application.petstore.util.Loggable;
 import org.agoncal.application.petstore.view.AbstractBean;
 import org.agoncal.application.petstore.view.CatchException;
 import org.agoncal.application.petstore.view.LoggedIn;

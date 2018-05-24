@@ -1,6 +1,6 @@
 package org.agoncal.application.petstore.service;
 
-import org.agoncal.application.petstore.util.Loggable;
+import org.agoncal.application.cfg.Loggable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

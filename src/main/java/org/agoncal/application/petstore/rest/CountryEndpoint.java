@@ -2,8 +2,8 @@ package org.agoncal.application.petstore.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.agoncal.application.cfg.Loggable;
 import org.agoncal.application.petstore.model.Country;
-import org.agoncal.application.petstore.util.Loggable;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;

@@ -1,7 +1,7 @@
 package org.agoncal.application.petstore.view.admin;
 
+import org.agoncal.application.cfg.Loggable;
 import org.agoncal.application.petstore.model.Customer;
-import org.agoncal.application.petstore.util.Loggable;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;

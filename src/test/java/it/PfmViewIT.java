@@ -2,6 +2,7 @@ package it;
 
 import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import org.agoncal.application.pfm.services.CategoryRepo;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -28,7 +29,7 @@ public class PfmViewIT extends BaseIT {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return deployment();
+        return deployment().addClass(CategoryRepo.class);
     }
 
     @BeforeClass

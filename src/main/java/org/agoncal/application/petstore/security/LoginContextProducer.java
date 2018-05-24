@@ -1,6 +1,6 @@
 package org.agoncal.application.petstore.security;
 
-import org.agoncal.application.petstore.util.ConfigProperty;
+import org.agoncal.application.cfg.ConfigProperty;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;

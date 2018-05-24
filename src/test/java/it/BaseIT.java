@@ -9,7 +9,6 @@ public class BaseIT {
                 .useMaven3Version("3.3.9")
                 .setGoals("package")
                 .setQuiet()
-                .setProfiles("E2E")
                 .ignoreFailure()
                 .build()
                 .getDefaultBuiltArchive()).addClasses(DataSets.class, BaseIT.class);

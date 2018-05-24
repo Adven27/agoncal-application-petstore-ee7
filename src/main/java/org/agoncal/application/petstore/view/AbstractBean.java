@@ -1,6 +1,6 @@
 package org.agoncal.application.petstore.view;
 
-import org.agoncal.application.petstore.util.Loggable;
+import org.agoncal.application.cfg.Loggable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

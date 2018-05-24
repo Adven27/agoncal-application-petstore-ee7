@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd">
 
     <interceptors>
-        <class>org.agoncal.application.petstore.util.LoggingInterceptor</class>
+        <class>org.agoncal.application.cfg.LoggingInterceptor</class>
         <class>org.agoncal.application.petstore.view.ExceptionInterceptor</class>
     </interceptors>
 

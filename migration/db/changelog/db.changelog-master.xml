@@ -10,5 +10,11 @@
             <column name="dt" type="TIMESTAMP"/>
             <column name="category" type="VARCHAR"/>
         </createTable>
+        <createTable tableName="Category">
+            <column name="id" type="NUMBER"/>
+            <column name="category" type="VARCHAR">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

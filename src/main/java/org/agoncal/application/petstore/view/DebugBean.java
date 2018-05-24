@@ -1,6 +1,6 @@
 package org.agoncal.application.petstore.view;
 
-import org.agoncal.application.petstore.util.Loggable;
+import org.agoncal.application.cfg.Loggable;
 
 import javax.enterprise.inject.Model;
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.cfg.Loggable;
 import org.agoncal.application.petstore.model.Country;
 import org.agoncal.application.petstore.model.Customer;
-import org.agoncal.application.petstore.util.Loggable;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
