@@ -1,0 +1,5 @@
+<dataset>
+    <transaction id="1" amount="1000" dt="now" category="FOOD"/>
+    <transaction id="2" amount="200" dt="now" category="DRINK"/>
+    <transaction id="3" amount="220" dt="now" category="DRINK"/>
+</dataset>

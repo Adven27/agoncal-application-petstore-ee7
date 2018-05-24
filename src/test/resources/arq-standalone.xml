@@ -140,17 +140,32 @@
         <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
-                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:oracle:thin:@db-fe4.bt.bpc.in:1521:sv</connection-url>
-                    <driver>oracle</driver>
+                <datasource jndi-name="java:jboss/datasources/hsql" pool-name="hsql" enabled="true"
+                            use-java-context="true">
+                    <connection-url>jdbc:hsqldb:mem:testdb;shutdown=true</connection-url>
+                    <driver>hsql</driver>
                     <security>
-                        <user-name>toropanov</user-name>
-                        <password>toropanov1</password>
+                        <user-name>sa</user-name>
+                        <password></password>
+                    </security>
+                </datasource>
+                <datasource jndi-name="java:jboss/datasources/h2" pool-name="h2" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
                     </security>
                 </datasource>
                 <drivers>
                     <driver name="oracle" module="com.oracle.ojdbc">
                         <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+                    </driver>
+                    <driver name="hsql" module="org.hsql">
+                        <datasource-class>org.hsqldb.jdbc.JDBCDataSource</datasource-class>
+                    </driver>
+                    <driver name="h2" module="com.h2database.h2">
+                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -508,9 +523,4 @@
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
     </socket-binding-group>
-    <deployments>
-        <deployment name="applicationPetstore" runtime-name="applicationPetstore.war">
-            <fs-exploded path="D:\Users\Toropanov\Test\agoncal-application-petstore-ee7\target\applicationPetstore"/>
-        </deployment>
-    </deployments>
 </server>

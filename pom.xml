@@ -135,7 +135,7 @@
             <dependency>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
-                <version>3.6.1</version>
+                <version>LATEST</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -394,6 +394,12 @@
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
                     <version>${version.arquillian.wildfly}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-persistence-dbunit</artifactId>
+                    <version>1.0.0.Alpha7</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>

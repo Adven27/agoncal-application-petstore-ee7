@@ -18,7 +18,7 @@ import java.sql.Connection;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 public class InitBean {
-    private static final String STAGE = "";
+    private static final String STAGE = "prod";
     private static final String CHANGELOG_FILE = "db/changelog/db.changelog-master.xml";
 
     @Resource
@@ -33,7 +33,6 @@ public class InitBean {
                     DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))
             );
             lb.validate();
-            //lb.dropAll();
             lb.update(STAGE);
         } catch (Exception e) {
             throw new IllegalStateException(e);

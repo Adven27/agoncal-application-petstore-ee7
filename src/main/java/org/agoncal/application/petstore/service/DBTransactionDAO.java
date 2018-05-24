@@ -1,13 +1,13 @@
 package org.agoncal.application.petstore.service;
 
+import org.agoncal.application.petstore.util.Loggable;
 import org.agoncal.application.petstore.view.shopping.Transaction;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-@Stateless
+@Loggable
 public class DBTransactionDAO implements TransactionDAO {
     private final EntityManager em;
 
