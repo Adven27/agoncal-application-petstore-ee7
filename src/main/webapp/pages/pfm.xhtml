@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/templates/basic.xhtml">
 
     <ui:define name="pageTitle">
-        <h:outputText value="PFM HEADER"/>
+        <h:outputText value="PFM"/>
     </ui:define>
 
     <ui:define name="mainPageContent">
@@ -32,20 +33,63 @@
 
                         <div class="container-embedded container--row">
                             <div class="row">
+                                <div>
+                                    <h:form id="filter">
+                                        <h:panelGroup layout="block" id="historyFilter">
+                                            <div class="form-group">
+                                                <p:calendar id="fromDate" value="#{pfmView.filter.from}"
+                                                            required="true"
+                                                            binding="#{fromDateInput}"
+                                                            label="from"
+                                                            pattern="dd/MM/yyyy HH:mm:ss"
+                                                            maxdate="#{pfmView.filter.to}"
+                                                            styleClass="block block--hundred display-block">
+                                                    <p:ajax event="dateSelect" global="false" process="@this"
+                                                            update="toDate, panel"/>
+                                                </p:calendar>
+                                            </div>
+                                            <div class="form-group">
+                                                <p:calendar id="toDate" value="#{pfmView.filter.to}"
+                                                            required="true"
+                                                            label="to"
+                                                            pattern="dd.MM.yyyy"
+                                                            mindate="#{pfmView.filter.from}"
+                                                            styleClass="block block--hundred display-block">
+                                                    <p:ajax event="dateSelect" global="false" process="@this"
+                                                            update="fromDate, panel"/>
+                                                </p:calendar>
+                                            </div>
+                                            <div>
+                                                <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
+                                                                 autoWidth="false">
+                                                    <f:selectItems value="#{pfmView.products}"/>
+                                                    <p:ajax event="change" process="@this" update="panel"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </h:panelGroup>
+                                        <div class="divider divider--double"/>
+                                        <p:commandButton value="filter"
+                                                         onsuccess="refresh();"
+                                                         update="filter" global="false"
+                                                         styleClass="button button--primary"/>
+                                    </h:form>
+                                </div>
                                 <div class="col-sm-12">
                                     <p:growl id="growl" showDetail="true"/>
-                                    <p:chart type="donut" model="#{pfmView.donut}">
-                                        <p:ajax event="itemSelect" update="growl, transactions"
-                                                listener="#{pfmView.itemSelect}"/>
-                                    </p:chart>
-                                    <h:dataTable id="transactions" value="#{pfmView.transactions}" var="trn"
-                                                 rendered="#{not empty pfmView.transactions}"
-                                                 styleClass="it-transactions table"
-                                                 columnClasses="it-cat, it-sum, it-date">
-                                        <h:column><h:outputText value="#{trn.category}"/></h:column>
-                                        <h:column><h:outputText value="#{trn.amount}"/></h:column>
-                                        <h:column><h:outputText value="#{trn.dt}"/></h:column>
-                                    </h:dataTable>
+                                    <h:panelGroup id="panel">
+                                        <p:chart type="donut" model="#{pfmView.donut}">
+                                            <p:ajax event="itemSelect" update="growl, transactions"
+                                                    listener="#{pfmView.itemSelect}"/>
+                                        </p:chart>
+                                        <h:dataTable id="transactions" value="#{pfmView.productOperations}" var="trn"
+                                                     rendered="#{not empty pfmView.productOperations}"
+                                                     styleClass="it-transactions table"
+                                                     columnClasses="it-cat, it-sum, it-date">
+                                            <h:column><h:outputText value="#{trn.category}"/></h:column>
+                                            <h:column><h:outputText value="#{trn.amount}"/></h:column>
+                                            <h:column><h:outputText value="#{trn.dt}"/></h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
                                 </div>
                             </div>
                         </div>

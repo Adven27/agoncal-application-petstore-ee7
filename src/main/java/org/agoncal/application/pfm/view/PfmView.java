@@ -1,9 +1,9 @@
 package org.agoncal.application.pfm.view;
 
-import com.google.common.base.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.agoncal.application.pfm.model.ClientCardInfo;
 import org.agoncal.application.pfm.services.PFMService;
 import org.primefaces.event.ItemSelectEvent;
@@ -15,13 +15,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class PfmView implements Serializable {
     private final Map<String, List<Operation>> productOperations = new LinkedHashMap<>();
     private final PFMService pfmService;
-    @Getter
-    private DonutChartModel donut;
+    @Getter private DonutChartModel donut;
     private String selectedCategory;
-    private Filter filter;
+    @Getter @Setter private Filter filter;
 
     @Inject
     public PfmView(PFMService pfmService) {
@@ -37,8 +38,8 @@ public class PfmView implements Serializable {
         filter = initFilter(productOperations);
 
         LinkedHashMap<String, Number> cat2Sum = new LinkedHashMap<>();
-        if (filter.getProduct().isPresent()) {
-            String p = filter.getProduct().get();
+        if (!isNullOrEmpty(filter.getProduct())) {
+            String p = filter.getProduct();
             List<Operation> operations = map(pfmService.operations(p, filter.getFrom(), filter.getTo()));
             productOperations.put(p, operations);
             cat2Sum.putAll(getExpenseMap(operations));
@@ -49,8 +50,8 @@ public class PfmView implements Serializable {
     private Filter initFilter(Map<String, List<Operation>> productOperations) {
         return new Filter(
                 productOperations.isEmpty()
-                        ? Optional.<String>absent()
-                        : Optional.of(productOperations.keySet().iterator().next()),
+                        ? null
+                        : productOperations.keySet().iterator().next(),
                 new Date(),
                 new Date()
         );
@@ -71,11 +72,11 @@ public class PfmView implements Serializable {
     }
 
     public List<Operation> getProductOperations() {
-        return filter.getProduct().isPresent()
-                ? selectedCategory == null
-                ? productOperations.get(filter.getProduct().get())
-                : filter(productOperations.get(filter.getProduct().get()), selectedCategory)
-                : Collections.<Operation>emptyList();
+        return isNullOrEmpty(filter.getProduct())
+                ? Collections.<Operation>emptyList()
+                : selectedCategory == null
+                ? productOperations.get(filter.getProduct())
+                : filter(productOperations.get(filter.getProduct()), selectedCategory);
     }
 
     public void itemSelect(ItemSelectEvent e) {
@@ -136,6 +137,10 @@ public class PfmView implements Serializable {
         return result;
     }
 
+    public Set<String> getProducts() {
+        return productOperations.keySet();
+    }
+
     @Data
     @AllArgsConstructor
     public static class Operation {
@@ -147,7 +152,7 @@ public class PfmView implements Serializable {
     @Data
     @AllArgsConstructor
     public static class Filter {
-        private Optional<String> product;
+        private String product;
         private Date from;
         private Date to;
     }
