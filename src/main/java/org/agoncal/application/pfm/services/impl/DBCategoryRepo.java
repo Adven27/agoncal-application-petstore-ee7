@@ -1,6 +1,5 @@
 package org.agoncal.application.pfm.services.impl;
 
-import org.agoncal.application.pfm.model.Category;
 import org.agoncal.application.pfm.services.CategoryRepo;
 
 import javax.inject.Inject;
@@ -16,7 +15,7 @@ public class DBCategoryRepo implements CategoryRepo {
     }
 
     @Override
-    public List<Category> findAll() {
+    public List<String> findAll() {
         return null;
     }
 }
