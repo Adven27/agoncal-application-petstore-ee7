@@ -10,19 +10,27 @@ import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.DonutChartModel;
 
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+@Named
+@ViewScoped
 public class PfmView implements Serializable {
     private final Map<String, List<Operation>> productOperations = new LinkedHashMap<>();
     private final PFMService pfmService;
-    @Getter private DonutChartModel donut;
+    @Getter
+    private DonutChartModel donut = new DonutChartModel();
     private String selectedCategory;
-    @Getter @Setter private Filter filter;
+
+    @Getter
+    @Setter
+    private Filter filter;
 
     @Inject
     public PfmView(PFMService pfmService) {
@@ -32,11 +40,14 @@ public class PfmView implements Serializable {
     @PostConstruct
     public void postConstruct() {
         for (ClientCardInfo c : pfmService.cards()) {
-            productOperations.put(c.getIdentifier(), new ArrayList<Operation>());
+            productOperations.put(c.getIdentifier(), null);
         }
-
         filter = initFilter(productOperations);
 
+        initDonut(filter);
+    }
+
+    private void initDonut(Filter filter) {
         LinkedHashMap<String, Number> cat2Sum = new LinkedHashMap<>();
         if (!isNullOrEmpty(filter.getProduct())) {
             String p = filter.getProduct();
@@ -81,6 +92,10 @@ public class PfmView implements Serializable {
 
     public void itemSelect(ItemSelectEvent e) {
         selectedCategory = selectCategoryBy(e.getItemIndex(), donut.getData().get(0));
+    }
+
+    public void changeProduct() {
+        initDonut(filter);
     }
 
     private String selectCategoryBy(int index, Map<String, Number> circle) {

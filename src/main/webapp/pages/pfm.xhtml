@@ -35,61 +35,72 @@
                             <div class="row">
                                 <div>
                                     <h:form id="filter">
-                                        <h:panelGroup layout="block" id="historyFilter">
-                                            <div class="form-group">
-                                                <p:calendar id="fromDate" value="#{pfmView.filter.from}"
-                                                            required="true"
-                                                            binding="#{fromDateInput}"
-                                                            label="from"
-                                                            pattern="dd/MM/yyyy HH:mm:ss"
-                                                            maxdate="#{pfmView.filter.to}"
-                                                            styleClass="block block--hundred display-block">
-                                                    <p:ajax event="dateSelect" global="false" process="@this"
-                                                            update="toDate, panel"/>
-                                                </p:calendar>
+                                        <p:growl id="growl" showDetail="true"/>
+                                        <div class="ui-g">
+                                            <div class="ui-g-4">
+                                                <h:panelGroup id="chart">
+                                                    <p:chart type="donut" model="#{pfmView.donut}">
+                                                        <p:ajax event="itemSelect" update="growl, transactions"
+                                                                listener="#{pfmView.itemSelect}"/>
+                                                    </p:chart>
+                                                </h:panelGroup>
                                             </div>
-                                            <div class="form-group">
-                                                <p:calendar id="toDate" value="#{pfmView.filter.to}"
-                                                            required="true"
-                                                            label="to"
-                                                            pattern="dd.MM.yyyy"
-                                                            mindate="#{pfmView.filter.from}"
-                                                            styleClass="block block--hundred display-block">
-                                                    <p:ajax event="dateSelect" global="false" process="@this"
-                                                            update="fromDate, panel"/>
-                                                </p:calendar>
+                                            <div class="ui-g-8 ui-g-nopad">
+                                                <div class="ui-g-3 ui-md-3">
+                                                    <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
+                                                                     style="width: 100%"
+                                                                     autoWidth="false">
+                                                        <f:selectItems value="#{pfmView.products}"/>
+                                                        <p:ajax event="change" listener="#{pfmView.changeProduct}"
+                                                                update="panel, chart"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="ui-g-3 ui-md-3">
+                                                    <p:calendar id="fromDate" value="#{pfmView.filter.from}"
+                                                                required="true"
+                                                                binding="#{fromDateInput}"
+                                                                label="from"
+                                                                pattern="dd.MM.yyyy"
+                                                                maxdate="#{pfmView.filter.to}">
+                                                        <p:ajax event="dateSelect" global="false" process="@this"
+                                                                listener="#{pfmView.changeProduct}"
+                                                                update="panel, chart"/>
+                                                    </p:calendar>
+                                                </div>
+                                                <div class="ui-g-3 ui-md-3">
+                                                    <p:calendar id="toDate" value="#{pfmView.filter.to}"
+                                                                required="true"
+                                                                label="to"
+                                                                pattern="dd.MM.yyyy"
+                                                                mindate="#{pfmView.filter.from}">
+                                                        <p:ajax event="dateSelect" global="false" process="@this"
+                                                                listener="#{pfmView.changeProduct}"
+                                                                update="panel, chart"/>
+                                                    </p:calendar>
+                                                </div>
+                                                <div class="ui-g-3 ui-md-3">
+                                                    <p:commandButton value="filter" onsuccess="refresh();"
+                                                                     update="panel, chart"
+                                                                     global="false"
+                                                                     styleClass="button button--primary"/>
+                                                </div>
+                                                <div class="ui-g-12">
+                                                    <h:panelGroup id="panel">
+                                                        <h:dataTable id="transactions"
+                                                                     value="#{pfmView.productOperations}"
+                                                                     var="trn"
+                                                                     rendered="#{not empty pfmView.productOperations}"
+                                                                     styleClass="it-transactions table"
+                                                                     columnClasses="it-cat, it-sum, it-date">
+                                                            <h:column><h:outputText value="#{trn.category}"/></h:column>
+                                                            <h:column><h:outputText value="#{trn.amount}"/></h:column>
+                                                            <h:column><h:outputText value="#{trn.dt}"/></h:column>
+                                                        </h:dataTable>
+                                                    </h:panelGroup>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
-                                                                 autoWidth="false">
-                                                    <f:selectItems value="#{pfmView.products}"/>
-                                                    <p:ajax event="change" process="@this" update="panel"/>
-                                                </p:selectOneMenu>
-                                            </div>
-                                        </h:panelGroup>
-                                        <div class="divider divider--double"/>
-                                        <p:commandButton value="filter"
-                                                         onsuccess="refresh();"
-                                                         update="filter" global="false"
-                                                         styleClass="button button--primary"/>
+                                        </div>
                                     </h:form>
-                                </div>
-                                <div class="col-sm-12">
-                                    <p:growl id="growl" showDetail="true"/>
-                                    <h:panelGroup id="panel">
-                                        <p:chart type="donut" model="#{pfmView.donut}">
-                                            <p:ajax event="itemSelect" update="growl, transactions"
-                                                    listener="#{pfmView.itemSelect}"/>
-                                        </p:chart>
-                                        <h:dataTable id="transactions" value="#{pfmView.productOperations}" var="trn"
-                                                     rendered="#{not empty pfmView.productOperations}"
-                                                     styleClass="it-transactions table"
-                                                     columnClasses="it-cat, it-sum, it-date">
-                                            <h:column><h:outputText value="#{trn.category}"/></h:column>
-                                            <h:column><h:outputText value="#{trn.amount}"/></h:column>
-                                            <h:column><h:outputText value="#{trn.dt}"/></h:column>
-                                        </h:dataTable>
-                                    </h:panelGroup>
                                 </div>
                             </div>
                         </div>
