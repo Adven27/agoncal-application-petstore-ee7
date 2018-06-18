@@ -1,7 +1,7 @@
 package org.agoncal.application.pfm.services.impl;
 
 import org.agoncal.application.cfg.Loggable;
-import org.agoncal.application.pfm.model.Transaction;
+import org.agoncal.application.pfm.Transaction;
 import org.agoncal.application.pfm.services.TransactionRepo;
 
 import javax.ejb.Stateless;

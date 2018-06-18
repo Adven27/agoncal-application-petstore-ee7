@@ -1,9 +1,9 @@
 package org.agoncal.application.pfm.services.impl;
 
 import lombok.NoArgsConstructor;
+import org.agoncal.application.pfm.ClientCardInfo;
+import org.agoncal.application.pfm.Operation;
 import org.agoncal.application.pfm.Origin;
-import org.agoncal.application.pfm.model.ClientCardInfo;
-import org.agoncal.application.pfm.model.Operation;
 import org.agoncal.application.pfm.services.PFMService;
 
 import javax.ejb.Stateless;

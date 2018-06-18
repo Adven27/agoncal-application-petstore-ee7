@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.agoncal.application.pfm.model.ClientCardInfo;
+import org.agoncal.application.pfm.ClientCardInfo;
 import org.agoncal.application.pfm.services.PFMService;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.DonutChartModel;
@@ -68,9 +68,9 @@ public class PfmView implements Serializable {
         );
     }
 
-    private List<Operation> map(List<? extends org.agoncal.application.pfm.model.Operation> operations) {
+    private List<Operation> map(List<? extends org.agoncal.application.pfm.Operation> operations) {
         List<Operation> result = new ArrayList<>();
-        for (org.agoncal.application.pfm.model.Operation op : operations) {
+        for (org.agoncal.application.pfm.Operation op : operations) {
             result.add(
                     new Operation(
                             op.getAmount().getAmount(),

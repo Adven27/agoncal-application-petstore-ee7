@@ -1,10 +1,10 @@
 package org.agoncal.application.petstore.view.shopping;
 
 import com.google.common.collect.ImmutableMap;
-import org.agoncal.application.pfm.model.ClientCardInfo;
-import org.agoncal.application.pfm.model.Currency;
-import org.agoncal.application.pfm.model.Money;
-import org.agoncal.application.pfm.model.Operation;
+import org.agoncal.application.pfm.ClientCardInfo;
+import org.agoncal.application.pfm.Currency;
+import org.agoncal.application.pfm.Money;
+import org.agoncal.application.pfm.Operation;
 import org.agoncal.application.pfm.services.PFMService;
 import org.agoncal.application.pfm.view.PfmView;
 import org.junit.After;
