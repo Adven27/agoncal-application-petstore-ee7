@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.joda.time.LocalDate.now;
 
 @Named
 @ViewScoped
@@ -63,8 +64,8 @@ public class PfmView implements Serializable {
                 productOperations.isEmpty()
                         ? null
                         : productOperations.keySet().iterator().next(),
-                new Date(),
-                new Date()
+                now().withDayOfMonth(1).toDate(),
+                now().plusDays(1).toDate()
         );
     }
 
@@ -74,6 +75,7 @@ public class PfmView implements Serializable {
             result.add(
                     new Operation(
                             op.getAmount().getAmount(),
+                            op.getAmount().getCurrency().getName(),
                             op.getDatetime(),
                             pfmService.categoryOf(op.getMcc())
                     )
@@ -123,12 +125,8 @@ public class PfmView implements Serializable {
     private DonutChartModel initChart(Map<String, Number> circle) {
         DonutChartModel d = new DonutChartModel();
         d.addCircle(decorateEmpty(circle));
-        d.setLegendPosition("e");
-        d.setSliceMargin(3);
-        d.setShowDataLabels(true);
         d.setExtender("extLegend");
         d.setDataFormat("value");
-        d.setShadow(true);
         return d;
     }
 
@@ -160,6 +158,7 @@ public class PfmView implements Serializable {
     @AllArgsConstructor
     public static class Operation {
         private BigDecimal amount;
+        private String currency;
         private Date dt;
         private String category;
     }

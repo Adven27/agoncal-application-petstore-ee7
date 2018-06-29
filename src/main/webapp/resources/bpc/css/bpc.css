@@ -1920,3 +1920,20 @@ h2 {
 .ui-selectonebutton--header {
   margin-top: 22px;
 }
+
+#holder {
+    width: 320px;
+    height: 320px;
+    position: relative;
+}
+
+.jqplot-target {
+    height: 100%;
+    width: 100%;
+}
+
+#summary {
+    font-size: 131px;
+    position: absolute;
+    z-index: inherit;
+}

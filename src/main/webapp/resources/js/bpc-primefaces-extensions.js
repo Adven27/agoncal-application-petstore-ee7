@@ -17,13 +17,13 @@ PrimeFaces.widget.MonthYearPicker = PrimeFaces.widget.BaseWidget.extend({
             if (this.cfg.behaviors) {
                 PrimeFaces.attachBehaviors(this.jqEl, this.cfg.behaviors);
             }
-            
+
             this.bindBeforeShowListener();
             this.bindOnCloseListener();
-            
+
             this.jq.data("primefaces-overlay-target", this.id).find("*").data("primefaces-overlay-target", this.id);
         }
-        
+
         if (!this.cfg.disabled) {
             this.jqEl.datepicker(this.cfg);
         }

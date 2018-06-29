@@ -13,13 +13,77 @@
     <ui:define name="mainPageContent">
         <div class="container">
             <script>
+                var TextFit = function () {
+                    var container = $('#holder');
+                    container.each(function () {
+                        var container_width = $(this).width(),
+                            width_offset = 10,
+                            font_container = $(this).find('#summary');
+                        var originalTxt = font_container.text();
+                        font_container.text(originalTxt.replace(/ /g, "_"));
+
+                        if (width_offset > 0) {
+                            container_width -= width_offset;
+                        }
+
+                        font_container.each(function () {
+                            var font_container_width = $(this).width(),
+                                font_size = parseFloat($(this).css('font-size')),
+                                diff = 0;
+
+                            if (container_width > font_container_width) {
+                                diff = container_width - font_container_width;
+                            } else if (container_width &lt; font_container_width) {
+                                diff = font_container_width - container_width;
+                            }
+
+                            var diff_percentage = Math.round((diff / Math.max(container_width, font_container_width)) * 100);
+
+                            if (diff_percentage !== 0) {
+                                if (container_width > font_container_width) {
+                                    new_font_size = font_size + Math.round((font_size / 100) * diff_percentage);
+                                } else if (container_width &lt; font_container_width) {
+                                    new_font_size = font_size - Math.round((font_size / 100) * diff_percentage);
+                                }
+                            }
+                            $(this).css('font-size', (new_font_size - 10) + 'px');
+                            font_container.text(originalTxt);
+                        });
+                    });
+                };
+
                 function extLegend() {
-                    this.cfg.legend = {
-                        show: true,
-                        location: 's',
-                        placement: 'outsideGrid'
+                    this.cfg.seriesDefaults.rendererOptions = {
+                        showDataLabels: false,
+                        showDataCategoryOnHover: true,
+                        sliceMargin: 1,
+                        ringMargin: 8,
+                        thickness: 15,
+                        startAngle: 0,
+                        padding: 10
                     };
+                    this.cfg.legend = {
+                        show: false
+                    };
+                    this.cfg.grid = {
+                        shadow: false,
+                        drawBorder: false,
+                        background: "transparent",
+                        shadowColor: "transparent"
+                    };
+                    this.cfg.highlighter = {
+                        show: true,
+                        tooltipLocation: "se",
+                        useAxesFormatters: false
+                    };
+
+                    var summary = $('#summary');
+                    summary.css('top', (summary.parent().height() / 2 - 50) + 'px');
+                    summary.css('left', '45px'/*summary.parent().width()/2*/);
+
+                    TextFit();
                 }
+
             </script>
             <div class="row">
                 <div class="col-lg-1 hidden-sm hidden-md"/>
@@ -37,28 +101,35 @@
                                     <h:form id="filter">
                                         <p:growl id="growl" showDetail="true"/>
                                         <div class="ui-g">
-                                            <div class="ui-g-4">
+                                            <div class="ui-g-5">
+
                                                 <h:panelGroup id="chart">
-                                                    <p:chart type="donut" model="#{pfmView.donut}">
-                                                        <p:ajax event="itemSelect" update="growl, transactions"
-                                                                listener="#{pfmView.itemSelect}"/>
-                                                    </p:chart>
+                                                    <div id="holder">
+                                                        <p:chart type="donut" model="#{pfmView.donut}">
+                                                            <p:ajax event="itemSelect" update="growl, transactions"
+                                                                    listener="#{pfmView.itemSelect}"/>
+                                                        </p:chart>
+                                                        <span id="summary">1 900.00 rub</span>
+                                                    </div>
                                                 </h:panelGroup>
+
+
                                             </div>
-                                            <div class="ui-g-8 ui-g-nopad">
-                                                <div class="ui-g-3 ui-md-3">
+                                            <div class="ui-g-7 ui-g-nopad">
+                                                <div class="ui-g-4 ui-md-4">
+                                                    <p:outputLabel for="product" value="Card"/>
                                                     <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
-                                                                     style="width: 100%"
+                                                                     style="width: 100%" label="Card"
                                                                      autoWidth="false">
                                                         <f:selectItems value="#{pfmView.products}"/>
                                                         <p:ajax event="change" listener="#{pfmView.changeProduct}"
                                                                 update="panel, chart"/>
                                                     </p:selectOneMenu>
                                                 </div>
-                                                <div class="ui-g-3 ui-md-3">
+                                                <div class="ui-g-4 ui-md-4">
+                                                    <p:outputLabel for="fromDate" value="From"/>
                                                     <p:calendar id="fromDate" value="#{pfmView.filter.from}"
-                                                                required="true"
-                                                                binding="#{fromDateInput}"
+                                                                inputStyle="width: 100%;"
                                                                 label="from"
                                                                 pattern="dd.MM.yyyy"
                                                                 maxdate="#{pfmView.filter.to}">
@@ -67,9 +138,10 @@
                                                                 update="panel, chart"/>
                                                     </p:calendar>
                                                 </div>
-                                                <div class="ui-g-3 ui-md-3">
+                                                <div class="ui-g-4 ui-md-4">
+                                                    <p:outputLabel for="toDate" value="To"/>
                                                     <p:calendar id="toDate" value="#{pfmView.filter.to}"
-                                                                required="true"
+                                                                inputStyle="width: 100%;"
                                                                 label="to"
                                                                 pattern="dd.MM.yyyy"
                                                                 mindate="#{pfmView.filter.from}">
@@ -77,12 +149,6 @@
                                                                 listener="#{pfmView.changeProduct}"
                                                                 update="panel, chart"/>
                                                     </p:calendar>
-                                                </div>
-                                                <div class="ui-g-3 ui-md-3">
-                                                    <p:commandButton value="filter" onsuccess="refresh();"
-                                                                     update="panel, chart"
-                                                                     global="false"
-                                                                     styleClass="button button--primary"/>
                                                 </div>
                                                 <div class="ui-g-12">
                                                     <h:panelGroup id="panel">
@@ -94,6 +160,7 @@
                                                                      columnClasses="it-cat, it-sum, it-date">
                                                             <h:column><h:outputText value="#{trn.category}"/></h:column>
                                                             <h:column><h:outputText value="#{trn.amount}"/></h:column>
+                                                            <h:column><h:outputText value="#{trn.currency}"/></h:column>
                                                             <h:column><h:outputText value="#{trn.dt}"/></h:column>
                                                         </h:dataTable>
                                                     </h:panelGroup>

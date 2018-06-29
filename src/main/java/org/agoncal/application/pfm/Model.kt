@@ -28,7 +28,7 @@ interface Money : Serializable {
 interface Currency : Serializable {
     val name: String
 
-    data class Simple(override val name: String = "SIMPLE") : Currency
+    data class Simple(override val name: String = "USD") : Currency
 }
 
 interface Operation {
