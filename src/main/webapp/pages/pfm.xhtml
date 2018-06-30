@@ -14,11 +14,11 @@
         <div class="container">
             <script>
                 var TextFit = function () {
-                    var container = $('#holder');
+                    var container = $('#chart');
                     container.each(function () {
                         var container_width = $(this).width(),
                             width_offset = 10,
-                            font_container = $(this).find('#summary');
+                            font_container = $(this).find('#chart-total');
                         var originalTxt = font_container.text();
                         font_container.text(originalTxt.replace(/ /g, "_"));
 
@@ -77,9 +77,9 @@
                         useAxesFormatters: false
                     };
 
-                    var summary = $('#summary');
-                    summary.css('top', (summary.parent().height() / 2 - 50) + 'px');
-                    summary.css('left', '45px'/*summary.parent().width()/2*/);
+                    var total = $('#chart-total');
+                    total.css('top', (total.parent().height() / 2 - 50) + 'px');
+                    total.css('left', '45px'/*total.parent().width()/2*/);
 
                     TextFit();
                 }
@@ -101,72 +101,82 @@
                                     <h:form id="filter">
                                         <p:growl id="growl" showDetail="true"/>
                                         <div class="ui-g">
-                                            <div class="ui-g-5">
-
-                                                <h:panelGroup id="chart">
-                                                    <div id="holder">
+                                            <div class="ui-g-4"/>
+                                            <div class="ui-g-4 ui-md-4">
+                                                <p:outputLabel for="product" value="Card"/>
+                                                <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
+                                                                 style="width: 100%" label="Card"
+                                                                 autoWidth="false">
+                                                    <f:selectItems value="#{pfmView.products}"/>
+                                                    <p:ajax event="change" listener="#{pfmView.changeProduct}"
+                                                            update="data"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="ui-g-2 ui-md-2">
+                                                <p:outputLabel for="fromDate" value="From"/>
+                                                <p:calendar id="fromDate" value="#{pfmView.filter.from}"
+                                                            inputStyle="width: 100%;"
+                                                            label="from"
+                                                            pattern="dd.MM.yyyy"
+                                                            maxdate="#{pfmView.filter.to}">
+                                                    <p:ajax event="dateSelect" global="false" process="@this"
+                                                            listener="#{pfmView.changeProduct}"
+                                                            update="data"/>
+                                                </p:calendar>
+                                            </div>
+                                            <div class="ui-g-2 ui-md-2">
+                                                <p:outputLabel for="toDate" value="To"/>
+                                                <p:calendar id="toDate" value="#{pfmView.filter.to}"
+                                                            inputStyle="width: 100%;"
+                                                            label="to"
+                                                            pattern="dd.MM.yyyy"
+                                                            mindate="#{pfmView.filter.from}">
+                                                    <p:ajax event="dateSelect" global="false" process="@this"
+                                                            listener="#{pfmView.changeProduct}"
+                                                            update="data"/>
+                                                </p:calendar>
+                                            </div>
+                                        </div>
+                                        <h:panelGroup layout="block" id="data" class="ui-g">
+                                            <div class="ui-g-3">
+                                                <h:panelGroup>
+                                                    <div id="chart">
                                                         <p:chart type="donut" model="#{pfmView.donut}">
                                                             <p:ajax event="itemSelect" update="growl, transactions"
                                                                     listener="#{pfmView.itemSelect}"/>
                                                         </p:chart>
-                                                        <span id="summary">1 900.00 rub</span>
+                                                        <span id="chart-total">#{pfmView.donut.total} #{pfmView.donut.currency}</span>
                                                     </div>
                                                 </h:panelGroup>
-
-
                                             </div>
-                                            <div class="ui-g-7 ui-g-nopad">
-                                                <div class="ui-g-4 ui-md-4">
-                                                    <p:outputLabel for="product" value="Card"/>
-                                                    <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
-                                                                     style="width: 100%" label="Card"
-                                                                     autoWidth="false">
-                                                        <f:selectItems value="#{pfmView.products}"/>
-                                                        <p:ajax event="change" listener="#{pfmView.changeProduct}"
-                                                                update="panel, chart"/>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="ui-g-4 ui-md-4">
-                                                    <p:outputLabel for="fromDate" value="From"/>
-                                                    <p:calendar id="fromDate" value="#{pfmView.filter.from}"
-                                                                inputStyle="width: 100%;"
-                                                                label="from"
-                                                                pattern="dd.MM.yyyy"
-                                                                maxdate="#{pfmView.filter.to}">
-                                                        <p:ajax event="dateSelect" global="false" process="@this"
-                                                                listener="#{pfmView.changeProduct}"
-                                                                update="panel, chart"/>
-                                                    </p:calendar>
-                                                </div>
-                                                <div class="ui-g-4 ui-md-4">
-                                                    <p:outputLabel for="toDate" value="To"/>
-                                                    <p:calendar id="toDate" value="#{pfmView.filter.to}"
-                                                                inputStyle="width: 100%;"
-                                                                label="to"
-                                                                pattern="dd.MM.yyyy"
-                                                                mindate="#{pfmView.filter.from}">
-                                                        <p:ajax event="dateSelect" global="false" process="@this"
-                                                                listener="#{pfmView.changeProduct}"
-                                                                update="panel, chart"/>
-                                                    </p:calendar>
-                                                </div>
-                                                <div class="ui-g-12">
-                                                    <h:panelGroup id="panel">
-                                                        <h:dataTable id="transactions"
-                                                                     value="#{pfmView.productOperations}"
-                                                                     var="trn"
-                                                                     rendered="#{not empty pfmView.productOperations}"
-                                                                     styleClass="it-transactions table"
-                                                                     columnClasses="it-cat, it-sum, it-date">
-                                                            <h:column><h:outputText value="#{trn.category}"/></h:column>
-                                                            <h:column><h:outputText value="#{trn.amount}"/></h:column>
-                                                            <h:column><h:outputText value="#{trn.currency}"/></h:column>
-                                                            <h:column><h:outputText value="#{trn.dt}"/></h:column>
-                                                        </h:dataTable>
-                                                    </h:panelGroup>
-                                                </div>
+                                            <div class="ui-g-3">
+                                                <h:panelGroup>
+                                                    <h:dataTable id="categories"
+                                                                 value="#{pfmView.donut.categoryBreakdown.entrySet()}"
+                                                                 var="e"
+                                                                 styleClass="it-breakdown"
+                                                                 columnClasses="it-cat, it-percent">
+                                                        <h:column><h:outputText value="#{e.key}"/></h:column>
+                                                        <h:column><h:outputText value="#{e.value}%"/></h:column>
+                                                    </h:dataTable>
+                                                </h:panelGroup>
                                             </div>
-                                        </div>
+                                            <div class="ui-g-6">
+                                                <h:panelGroup>
+                                                    <h:dataTable id="transactions"
+                                                                 value="#{pfmView.productOperations}"
+                                                                 var="trn"
+                                                                 rendered="#{not empty pfmView.productOperations}"
+                                                                 styleClass="it-transactions table"
+                                                                 columnClasses="it-cat, it-sum, it-date">
+                                                        <h:column><h:outputText value="#{trn.category}"/></h:column>
+                                                        <h:column><h:outputText value="#{trn.amount}"/></h:column>
+                                                        <h:column><h:outputText value="#{trn.currency}"/></h:column>
+                                                        <h:column><h:outputText value="#{trn.dt}"/></h:column>
+                                                    </h:dataTable>
+                                                </h:panelGroup>
+                                            </div>
+                                        </h:panelGroup>
                                     </h:form>
                                 </div>
                             </div>

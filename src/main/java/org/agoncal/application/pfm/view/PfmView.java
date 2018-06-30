@@ -1,9 +1,6 @@
 package org.agoncal.application.pfm.view;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.agoncal.application.pfm.ClientCardInfo;
 import org.agoncal.application.pfm.services.PFMService;
 import org.primefaces.event.ItemSelectEvent;
@@ -24,9 +21,10 @@ import static org.joda.time.LocalDate.now;
 @ViewScoped
 public class PfmView implements Serializable {
     private final Map<String, List<Operation>> productOperations = new LinkedHashMap<>();
+    private final Map<String, String> productCurrency = new HashMap<>();
     private final PFMService pfmService;
     @Getter
-    private DonutChartModel donut = new DonutChartModel();
+    private WithTotal donut;
     private String selectedCategory;
 
     @Getter
@@ -42,6 +40,7 @@ public class PfmView implements Serializable {
     public void postConstruct() {
         for (ClientCardInfo c : pfmService.cards()) {
             productOperations.put(c.getIdentifier(), null);
+            productCurrency.put(c.getIdentifier(), "rub");
         }
         filter = initFilter(productOperations);
 
@@ -56,7 +55,7 @@ public class PfmView implements Serializable {
             productOperations.put(p, operations);
             cat2Sum.putAll(getExpenseMap(operations));
         }
-        donut = initChart(cat2Sum);
+        donut = new WithTotal(cat2Sum, productCurrency.get(filter.getProduct()));
     }
 
     private Filter initFilter(Map<String, List<Operation>> productOperations) {
@@ -85,11 +84,11 @@ public class PfmView implements Serializable {
     }
 
     public List<Operation> getProductOperations() {
-        return isNullOrEmpty(filter.getProduct())
+        return filter.getProduct() == null
                 ? Collections.<Operation>emptyList()
                 : selectedCategory == null
-                ? productOperations.get(filter.getProduct())
-                : filter(productOperations.get(filter.getProduct()), selectedCategory);
+                        ? productOperations.get(filter.getProduct())
+                        : filter(productOperations.get(filter.getProduct()), selectedCategory);
     }
 
     public void itemSelect(ItemSelectEvent e) {
@@ -120,21 +119,6 @@ public class PfmView implements Serializable {
             }
         }
         return result;
-    }
-
-    private DonutChartModel initChart(Map<String, Number> circle) {
-        DonutChartModel d = new DonutChartModel();
-        d.addCircle(decorateEmpty(circle));
-        d.setExtender("extLegend");
-        d.setDataFormat("value");
-        return d;
-    }
-
-    private Map<String, Number> decorateEmpty(Map<String, Number> expenseMap) {
-        if (expenseMap.isEmpty()) {
-            expenseMap.put("Empty", 1);
-        }
-        return expenseMap;
     }
 
     private LinkedHashMap<String, Number> getExpenseMap(List<Operation> operations) {
@@ -169,5 +153,75 @@ public class PfmView implements Serializable {
         private String product;
         private Date from;
         private Date to;
+    }
+
+    @Data
+    @EqualsAndHashCode(exclude = "currency")
+    @AllArgsConstructor
+    public static class Product {
+        private String id;
+        private String currency;
+
+        public String toString() {
+            return id;
+        }
+    }
+
+    public class WithTotal extends DonutChartModel {
+        @Getter private final String currency;
+        @Getter private final Double total;
+        @Getter private final Map<String, Long> categoryBreakdown;
+
+        public WithTotal(Map<String, Number> data, String currency) {
+            super();
+            this.currency = currency;
+            total = total(data);
+            categoryBreakdown = breakDown(data);
+            setExtender("extLegend");
+            setDataFormat("value");
+            addCircle(decorateEmpty(data));
+        }
+
+        private Double total(Map<String, Number> data) {
+            double result = 0d;
+            for (Number sum : data.values()) {
+                result += sum.doubleValue();
+            }
+            return result;
+        }
+
+        private Map<String, Long> breakDown(Map<String, Number> data) {
+            Map<String, Long> result = new HashMap<>();
+            for (Map.Entry<String, Number> e : data.entrySet()) {
+                result.put(e.getKey(), Math.round(e.getValue().doubleValue() / getTotal() * 100));
+            }
+            return sort(result);
+        }
+
+        private Map<String, Number> decorateEmpty(Map<String, Number> expenseMap) {
+            if (expenseMap.isEmpty()) {
+                expenseMap.put("Empty", 1);
+            }
+            return expenseMap;
+        }
+
+        private <K, V extends Comparable<? super V>> Map<K, V> sort(final Map<K, V> toSort) {
+            List<Map.Entry<K, V>> entries = new ArrayList<>(toSort.size());
+            entries.addAll(toSort.entrySet());
+
+            Collections.sort(entries, new Comparator<Map.Entry<K, V>>() {
+                @Override
+                public int compare(final Map.Entry<K, V> e1, final Map.Entry<K, V> e2) {
+                    return e2.getValue().compareTo(e1.getValue());
+                }
+            });
+
+            Map<K, V> sorted = new LinkedHashMap<>();
+            for (Map.Entry<K, V> entry : entries) {
+                sorted.put(entry.getKey(), entry.getValue());
+            }
+            return sorted;
+        }
+
     }
 }

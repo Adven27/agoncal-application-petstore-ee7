@@ -1921,9 +1921,9 @@ h2 {
   margin-top: 22px;
 }
 
-#holder {
-    width: 320px;
-    height: 320px;
+#chart {
+  width: 290px;
+  height: 290px;
     position: relative;
 }
 
@@ -1932,7 +1932,7 @@ h2 {
     width: 100%;
 }
 
-#summary {
+#chart-total {
     font-size: 131px;
     position: absolute;
     z-index: inherit;
