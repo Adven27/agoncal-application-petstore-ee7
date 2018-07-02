@@ -1,5 +1,6 @@
 package org.agoncal.application.pfm.view;
 
+import com.google.common.base.Joiner;
 import lombok.*;
 import org.agoncal.application.pfm.ClientCardInfo;
 import org.agoncal.application.pfm.services.PFMService;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Arrays.asList;
 import static org.joda.time.LocalDate.now;
 
 @Named
@@ -170,7 +172,10 @@ public class PfmView implements Serializable {
     public class WithTotal extends DonutChartModel {
         @Getter private final String currency;
         @Getter private final Double total;
-        @Getter private final Map<String, Long> categoryBreakdown;
+        @Getter private final List<LegendRow> categoryBreakdown;
+        private final List<String> colors = asList(
+                "4bb2c5", "EAA228", "c5b47f", "579575", "839557", "958c12", "953579", "4b5de4",
+                "d8b83f", "ff5800", "0085cc", "c747a3", "cddf54", "FBD178", "26B4E3", "bd70c7");
 
         public WithTotal(Map<String, Number> data, String currency) {
             super();
@@ -179,6 +184,7 @@ public class PfmView implements Serializable {
             categoryBreakdown = breakDown(data);
             setExtender("extLegend");
             setDataFormat("value");
+            setSeriesColors(Joiner.on(",").join(colors));
             addCircle(decorateEmpty(data));
         }
 
@@ -190,12 +196,19 @@ public class PfmView implements Serializable {
             return result;
         }
 
-        private Map<String, Long> breakDown(Map<String, Number> data) {
-            Map<String, Long> result = new HashMap<>();
+        private List<LegendRow> breakDown(Map<String, Number> data) {
+            List<LegendRow> result = new ArrayList<>();
+
+            int i = 0;
             for (Map.Entry<String, Number> e : data.entrySet()) {
-                result.put(e.getKey(), Math.round(e.getValue().doubleValue() / getTotal() * 100));
+                result.add(new LegendRow("#" + colors.get(i++), e.getKey(), e.getValue(), Math.round(e.getValue().doubleValue() / total * 100)));
             }
-            return sort(result);
+            Collections.sort(result, new Comparator<LegendRow>() {
+                @Override public int compare(LegendRow o1, LegendRow o2) {
+                    return Double.compare(o2.getSum().doubleValue(), o1.getSum().doubleValue());
+                }
+            });
+            return result;
         }
 
         private Map<String, Number> decorateEmpty(Map<String, Number> expenseMap) {
@@ -223,5 +236,11 @@ public class PfmView implements Serializable {
             return sorted;
         }
 
+        @Data @AllArgsConstructor public class LegendRow {
+            String color;
+            String label;
+            Number sum;
+            long percent;
+        }
     }
 }

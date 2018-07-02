@@ -1937,3 +1937,25 @@ h2 {
     position: absolute;
     z-index: inherit;
 }
+
+#area {
+    margin: 0;
+    position: relative;
+    width: 25px;
+    height: 25px;
+}
+
+#ring {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    background: transparent;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), inset 2px 2px 4px rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), inset 2px 2px 4px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), inset 2px 2px 4px rgba(0, 0, 0, .5);
+    border: 4px solid;
+    z-index: 1;
+}
