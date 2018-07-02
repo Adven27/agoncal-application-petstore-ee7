@@ -11,54 +11,15 @@
     </ui:define>
 
     <ui:define name="mainPageContent">
-        <div class="container">
+        <div class="container" style="width: 90%;">
             <script>
-                var TextFit = function () {
-                    var container = $('#chart');
-                    container.each(function () {
-                        var container_width = $(this).width(),
-                            width_offset = 10,
-                            font_container = $(this).find('#chart-total');
-                        var originalTxt = font_container.text();
-                        font_container.text(originalTxt.replace(/ /g, "_"));
-
-                        if (width_offset > 0) {
-                            container_width -= width_offset;
-                        }
-
-                        font_container.each(function () {
-                            var font_container_width = $(this).width(),
-                                font_size = parseFloat($(this).css('font-size')),
-                                diff = 0;
-
-                            if (container_width > font_container_width) {
-                                diff = container_width - font_container_width;
-                            } else if (container_width &lt; font_container_width) {
-                                diff = font_container_width - container_width;
-                            }
-
-                            var diff_percentage = Math.round((diff / Math.max(container_width, font_container_width)) * 100);
-
-                            if (diff_percentage !== 0) {
-                                if (container_width > font_container_width) {
-                                    new_font_size = font_size + Math.round((font_size / 100) * diff_percentage);
-                                } else if (container_width &lt; font_container_width) {
-                                    new_font_size = font_size - Math.round((font_size / 100) * diff_percentage);
-                                }
-                            }
-                            $(this).css('font-size', (new_font_size - 10) + 'px');
-                            font_container.text(originalTxt);
-                        });
-                    });
-                };
-
                 function extLegend() {
                     this.cfg.seriesDefaults.rendererOptions = {
                         showDataLabels: false,
                         showDataCategoryOnHover: true,
                         sliceMargin: 1,
                         ringMargin: 8,
-                        thickness: 15,
+                        thickness: 20,
                         startAngle: 0,
                         padding: 10
                     };
@@ -73,39 +34,43 @@
                     };
                     this.cfg.highlighter = {
                         show: true,
-                        tooltipLocation: "se",
-                        useAxesFormatters: false
+                        tooltipLocation: "ne",
+                        useAxesFormatters: false,
+                        sizeAdjust: 3,
+                        tooltipFormatString: '%s'
                     };
 
                     var total = $('#chart-total');
-                    total.css('top', (total.parent().height() / 2 - 50) + 'px');
-                    total.css('left', '45px'/*total.parent().width()/2*/);
-
-                    TextFit();
+                    total.textfill({
+                        widthOnly: true,
+                        maxFontPixels: 0,
+                        success: function (t) {
+                            $(t).css('top',
+                                $('#chart').width() / 2 - parseInt($(t.firstElementChild).css('font-size'), 10) + 'px');
+                            $(t).css('left', '60px');
+                        }
+                    });
                 }
-
             </script>
             <div class="row">
-                <div class="col-lg-1 hidden-sm hidden-md"/>
-                <div class="col-lg-10 col-sm-12">
+                <div class="col-xs-12 col-sm-12">
                     <div class="container-embedded panel panel--content">
-                        <h2 class="text text--normal">
-                            <h:outputText value="#{msg['page.pfm.pageHeader']}"/>
-                        </h2>
-
-                        <div class="separator separator--header"/>
-
                         <div class="container-embedded container--row">
                             <div class="row">
                                 <div>
                                     <h:form id="filter">
                                         <p:growl id="growl" showDetail="true"/>
                                         <div class="ui-g">
-                                            <div class="ui-g-4"/>
+                                            <div class="ui-g-4">
+                                                <h2 class="text text--normal">
+                                                    <h:outputText value="#{msg['page.pfm.pageHeader']}"/>
+                                                </h2>
+                                            </div>
                                             <div class="ui-g-4 ui-md-4">
                                                 <p:outputLabel for="product" value="Card"/>
                                                 <p:selectOneMenu id="product" value="#{pfmView.filter.product}"
-                                                                 style="width: 100%" label="Card"
+                                                                 styleClass="block block--hundred display-block"
+                                                                 label="Card"
                                                                  autoWidth="false">
                                                     <f:selectItems value="#{pfmView.products}"/>
                                                     <p:ajax event="change" listener="#{pfmView.changeProduct}"
@@ -115,7 +80,7 @@
                                             <div class="ui-g-2 ui-md-2">
                                                 <p:outputLabel for="fromDate" value="From"/>
                                                 <p:calendar id="fromDate" value="#{pfmView.filter.from}"
-                                                            inputStyle="width: 100%;"
+                                                            styleClass="block block--hundred display-block"
                                                             label="from"
                                                             pattern="dd.MM.yyyy"
                                                             maxdate="#{pfmView.filter.to}">
@@ -128,6 +93,7 @@
                                                 <p:outputLabel for="toDate" value="To"/>
                                                 <p:calendar id="toDate" value="#{pfmView.filter.to}"
                                                             inputStyle="width: 100%;"
+                                                            styleClass="block block--hundred display-block"
                                                             label="to"
                                                             pattern="dd.MM.yyyy"
                                                             mindate="#{pfmView.filter.from}">
@@ -137,6 +103,7 @@
                                                 </p:calendar>
                                             </div>
                                         </div>
+                                        <div class="separator separator--header"/>
                                         <h:panelGroup layout="block" id="data" class="ui-g">
                                             <div class="ui-g-3">
                                                 <h:panelGroup>
@@ -145,19 +112,43 @@
                                                             <p:ajax event="itemSelect" update="growl, transactions"
                                                                     listener="#{pfmView.itemSelect}"/>
                                                         </p:chart>
-                                                        <span id="chart-total">#{pfmView.donut.total} #{pfmView.donut.currency}</span>
+                                                        <div id="chart-total">
+                                                            <span>#{pfmView.donut.total} #{pfmView.donut.currency}</span>
+                                                        </div>
                                                     </div>
                                                 </h:panelGroup>
                                             </div>
                                             <div class="ui-g-3">
                                                 <h:panelGroup>
-                                                    <h:dataTable id="categories"
-                                                                 value="#{pfmView.donut.categoryBreakdown.entrySet()}"
-                                                                 var="e"
-                                                                 styleClass="it-breakdown"
-                                                                 columnClasses="it-cat, it-percent">
-                                                        <h:column><h:outputText value="#{e.key}"/></h:column>
-                                                        <h:column><h:outputText value="#{e.value}%"/></h:column>
+                                                    <h:dataTable id="categories" width="100%"
+                                                                 value="#{pfmView.donut.categoryBreakdown}"
+                                                                 var="e">
+                                                        <h:column>
+                                                            <div class="ui-g">
+                                                                <div class="ui-g-1 ui-md-1"
+                                                                     style="padding-bottom: 0; display: flex; flex-direction: column-reverse">
+                                                                    <div id="area">
+                                                                        <div id="ring"
+                                                                             style="border-color:#{e.color}"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ui-g-7 text text--h4-header text--muted"
+                                                                     style="padding-bottom: 0; display: flex; flex-direction: column-reverse">
+                                                                    <h:outputText value="#{e.label}"/>
+                                                                </div>
+                                                                <div class="ui-g-2 text--balance text--align-right"
+                                                                     style="padding-bottom: 0">
+                                                                    <h:outputText value="#{e.percent}%"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ui-g">
+                                                                <div class="ui-g-8"/>
+                                                                <div class="ui-g-2 text text--minor text--align-right">
+                                                                    <h:outputText
+                                                                            value="#{e.sum} #{pfmView.donut.currency}"/>
+                                                                </div>
+                                                            </div>
+                                                        </h:column>
                                                     </h:dataTable>
                                                 </h:panelGroup>
                                             </div>
@@ -183,7 +174,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1 hidden-sm hidden-md"/>
             </div>
         </div>
     </ui:define>
